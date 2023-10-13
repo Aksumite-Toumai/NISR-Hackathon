@@ -1,0 +1,13 @@
+dash
+flask
+pandas
+flask-login
+dash-bootstrap-templates
+sqlalchemy
+werkzeug
+flask_sqlalchemy
+dash_core_components
+dash_html_components
+configparser
+dash-bootstrap-components
+xlrd
