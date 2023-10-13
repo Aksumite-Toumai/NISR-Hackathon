@@ -11,3 +11,4 @@ dash_html_components
 configparser
 dash-bootstrap-components
 xlrd
+dash-pivottable
