@@ -12,3 +12,5 @@ configparser
 dash-bootstrap-components
 xlrd
 dash-pivottable
+openpyxl
+dash-slicer

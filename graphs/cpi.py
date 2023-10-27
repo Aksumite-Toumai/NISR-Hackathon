@@ -41,7 +41,6 @@ def generate_other_indices_plots(data_cleaned):
                 go.Scatter(x=data_cleaned.columns[1:], y=imported_goods, mode='lines', name="Imported Goods Index")
             ],
             'layout': go.Layout(
-                title='Local vs. Imported Goods Index Over Time',
                 xaxis={'title': 'Date'},
                 yaxis={'title': 'Index Value'},
                 hovermode='closest',
@@ -52,7 +51,7 @@ def generate_other_indices_plots(data_cleaned):
     )
 
     graphs.append(dbc.Card([
-        dbc.CardHeader("GENERAL INDEX (CPI) for Each Month Across Years", style={"color": "white", 'font-size': 20},),
+        dbc.CardHeader("Local vs. Imported Goods Index Over Time", style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
                 html.Div([
@@ -81,7 +80,6 @@ def generate_other_indices_plots(data_cleaned):
                 ) for category in categories
             ],
             'layout': go.Layout(
-                title='Different Categories of Goods Over Time',
                 xaxis={'title': 'Date'},
                 yaxis={'title': 'Index Value'},
                 hovermode='closest',
@@ -90,7 +88,7 @@ def generate_other_indices_plots(data_cleaned):
         }
     )
     graphs.append(dbc.Card([
-        dbc.CardHeader("GENERAL INDEX (CPI) for Each Month Across Years", style={"color": "white", 'font-size': 20},),
+        dbc.CardHeader("Different Categories of Goods Over Time", style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
                 html.Div([
@@ -118,7 +116,6 @@ def generate_other_indices_plots(data_cleaned):
                 ) for index in special_indices
             ],
             'layout': go.Layout(
-                title='Special Indices Over Time',
                 xaxis={'title': 'Date'},
                 yaxis={'title': 'Index Value'},
                 hovermode='closest',
@@ -127,7 +124,7 @@ def generate_other_indices_plots(data_cleaned):
         }
     )
     graphs.append(dbc.Card([
-        dbc.CardHeader("GENERAL INDEX (CPI) for Each Month Across Years", style={"color": "white", 'font-size': 20},),
+        dbc.CardHeader("Special Indices Over Time", style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
                 html.Div([
@@ -194,7 +191,6 @@ def get_raw_indice_plot(URBAN_DATA_CLEANED, items_list):
                                 ) for item in items_list
                             ],
                             'layout': go.Layout(
-                                title='',
                                 xaxis={
                                     'title': 'Date',
                                     'tickvals': [URBAN_DATA_CLEANED.
@@ -202,7 +198,8 @@ def get_raw_indice_plot(URBAN_DATA_CLEANED, items_list):
                                     'ticktext': [str(year) for year in range(2009, 2023)]
                                 },
                                 yaxis={'title': 'Index Value'},
-                                hovermode='closest'
+                                hovermode='closest',
+                                legend={'x': 0, 'y': 2, 'orientation': 'h'}
                             )
                         }
                     )
@@ -216,7 +213,7 @@ def get_raw_indice_plot(URBAN_DATA_CLEANED, items_list):
 # Annual changes plot
 def get_annual_change_plot(annual_changes, items_list):
     card_content = [
-        dbc.CardHeader("Annual Changes Plot", style={"color": "white", 'font-size': 20},),
+        dbc.CardHeader("Annual Changes Over Time", style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
                 html.Div([
@@ -232,7 +229,6 @@ def get_annual_change_plot(annual_changes, items_list):
                                 ) for item in items_list
                             ],
                             'layout': go.Layout(
-                                title='Annual Changes Over Time',
                                 xaxis={
                                     'title': 'Date',
                                     'tickvals': [annual_changes.
@@ -240,7 +236,8 @@ def get_annual_change_plot(annual_changes, items_list):
                                     'ticktext': [str(year) for year in range(2009, 2023)]
                                 },
                                 yaxis={'title': 'Percentage Change'},
-                                hovermode='closest'
+                                hovermode='closest',
+                                legend={'x': 0, 'y': 2, 'orientation': 'h'}
                             )
                         }, style={"padding": "0"},
                     ),
@@ -278,7 +275,8 @@ def get_monthly_change_general_index(monthly_changes_cpi):
                                     'ticktext': [str(year) for year in range(2009, 2023)]
                                 },
                                 yaxis={'title': 'Percentage Change'},
-                                hovermode='closest'
+                                hovermode='closest',
+                                legend={'x': 0, 'y': 2, 'orientation': 'h'}
                             )
                         }, style={"padding": "0"},
                     ),
@@ -312,7 +310,7 @@ def get_change_across_years_general_index(cpi_yearly_pivot):
                                 xaxis={'title': 'Year'},
                                 yaxis={'title': 'GENERAL INDEX (CPI)'},
                                 hovermode='closest',
-                                legend={'title': 'Month'}
+                                legend={'title': 'Month', 'x': 0, 'y': 2, 'orientation': 'h'}
                             )
                         }, style={"padding": "0"},
                     )
@@ -342,11 +340,10 @@ def get_change_across_month_general_index(cpi_monthly_pivot):
                                 ) for year in cpi_monthly_pivot.columns
                             ],
                             'layout': go.Layout(
-                                title='',
                                 xaxis={'title': 'Month'},
                                 yaxis={'title': 'GENERAL INDEX (CPI)'},
                                 hovermode='closest',
-                                legend={'title': 'Year'}
+                                legend={'title': 'Year', 'x': 0, 'y': 2, 'orientation': 'h'},
                             )
                         }
                     ),

@@ -47,7 +47,7 @@ external_scripts = ['/assets/js/bootstrap.min.js']
 DASH_APP = Dash(__name__,
                 server=FLASK_APP,
                 use_pages=True,
-                external_stylesheets=[dbc.themes.CYBORG, "/assets/style.css"],
+                external_stylesheets=[dbc.themes.SOLAR, "/assets/style.css"],
                 external_scripts=external_scripts,
                 prevent_initial_callbacks='initial_duplicate',
                 suppress_callback_exceptions=True)
@@ -127,3 +127,8 @@ def login_user(n_clicks, username, pwd):
             return 'Successfull', {'color': 'green'}, '/home'
         return error, {'color': 'red'}, '/login'
     return '', {}, '/login'
+
+
+# Run the app
+if __name__ == '__main__':
+    DASH_APP.run_server(port=8889, debug=True)

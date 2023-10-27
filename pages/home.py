@@ -1,7 +1,7 @@
 import dash
 from dash import html, dcc, callback, Input, Output, ctx
 import dash_bootstrap_components as dbc
-from graphs import cpi, gdp, lfs, pivottable, view
+from graphs import cpi, gdp, pivottable, view
 
 
 dash.register_page(__name__)
@@ -77,12 +77,7 @@ def layout():
                                 href="#",
                                 style={'color': "#696969"},
                                 className="nav-link nav-home-link",
-                                id="GDP"),
-                    dbc.NavLink("Labour Force Survey",
-                                href="#",
-                                style={'color': "#696969"},
-                                className="nav-home-link",
-                                id="LFS"),
+                                id="GDP")
                 ],
                 vertical=True,
                 pills=True,
@@ -143,16 +138,13 @@ def layout():
 @callback([Output("home-page-content", "children")],
           [Input("CPI", "n_clicks"),
            Input("GDP", "n_clicks"),
-           Input("LFS", "n_clicks"),
            Input("View-Data", "n_clicks"),
            Input("Pivot-Table", "n_clicks"),])
-def render_hone_page_content(btn1, btn2, btn3, btn4, btn5):
+def render_hone_page_content(btn1, btn2, btn4, btn5):
     button_clicked = ctx.triggered_id
     match button_clicked:
         case "GDP":
             return gdp.get_content()
-        case "LFS":
-            return lfs.get_content()
         case "View-Data":
             return view.get_content()
         case "Pivot-Table":
