@@ -5,6 +5,7 @@ import os
 import dash_bootstrap_components as dbc
 import dash.dependencies as dd
 from dash import callback
+from config import CONFIG
 
 
 DATASETS_PATH = os.environ.get("DATA_PATH")
@@ -47,7 +48,7 @@ def generate_other_indices_plots(data_cleaned):
                 legend={'x': 0, 'y': 2, 'orientation': 'h'}
 
             )
-        }
+        }, config=CONFIG
     )
 
     graphs.append(dbc.Card([
@@ -85,7 +86,7 @@ def generate_other_indices_plots(data_cleaned):
                 hovermode='closest',
                 legend={'x': 0, 'y': 2, 'orientation': 'h'}
             )
-        }
+        }, config=CONFIG
     )
     graphs.append(dbc.Card([
         dbc.CardHeader("Different Categories of Goods Over Time", style={"color": "white", 'font-size': 20},),
@@ -121,7 +122,7 @@ def generate_other_indices_plots(data_cleaned):
                 hovermode='closest',
                 legend={'x': 0, 'y': 2, 'orientation': 'h'}
             )
-        }
+        }, config=CONFIG
     )
     graphs.append(dbc.Card([
         dbc.CardHeader("Special Indices Over Time", style={"color": "white", 'font-size': 20},),
@@ -201,7 +202,7 @@ def get_raw_indice_plot(URBAN_DATA_CLEANED, items_list):
                                 hovermode='closest',
                                 legend={'x': 0, 'y': 2, 'orientation': 'h'}
                             )
-                        }
+                        }, config=CONFIG
                     )
                 ])
             ], style={"padding": "0"},
@@ -239,7 +240,7 @@ def get_annual_change_plot(annual_changes, items_list):
                                 hovermode='closest',
                                 legend={'x': 0, 'y': 2, 'orientation': 'h'}
                             )
-                        }, style={"padding": "0"},
+                        }, style={"padding": "0"}, config=CONFIG
                     ),
                 ], style={"padding": "0"},)
             ], style={"padding": "0"},
@@ -278,7 +279,7 @@ def get_monthly_change_general_index(monthly_changes_cpi):
                                 hovermode='closest',
                                 legend={'x': 0, 'y': 2, 'orientation': 'h'}
                             )
-                        }, style={"padding": "0"},
+                        }, style={"padding": "0"}, config=CONFIG
                     ),
                 ], style={"padding": "0"},)
             ], style={"padding": "0"},
@@ -312,7 +313,7 @@ def get_change_across_years_general_index(cpi_yearly_pivot):
                                 hovermode='closest',
                                 legend={'title': 'Month', 'x': 0, 'y': 2, 'orientation': 'h'}
                             )
-                        }, style={"padding": "0"},
+                        }, style={"padding": "0"}, config=CONFIG
                     )
                 ], style={"padding": "0"},)
             ], style={"padding": "0"},
@@ -345,7 +346,7 @@ def get_change_across_month_general_index(cpi_monthly_pivot):
                                 hovermode='closest',
                                 legend={'title': 'Year', 'x': 0, 'y': 2, 'orientation': 'h'},
                             )
-                        }
+                        }, config=CONFIG
                     ),
                 ])
             ], style={"padding": "0"},
