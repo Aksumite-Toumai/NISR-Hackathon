@@ -1,6 +1,5 @@
 from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
-from dash import callback, Output, Input
 from graphs import gdp
 
 

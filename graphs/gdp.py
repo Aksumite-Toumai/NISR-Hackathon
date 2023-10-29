@@ -7,6 +7,8 @@ from config import CONFIG
 from dash import callback, Output, Input
 import plotly.express as px
 import plotly.graph_objects as go
+import dash
+import numpy as np
 
 
 # datasets main directory
@@ -212,7 +214,129 @@ def get_content():
             "GDP by Kind of Activity at constant 2017 prices",
             "GDP by Kind of Activity Deflators",
             "Expenditure on GDP")
+    pop_dropdown_years = dcc.Dropdown(
+                    id='pop-year-dropdown',
+                    options=[
+                            {
+                                "label": html.Span(year, style={'color': 'black', 'font-size': 12}),
+                                "value": year,
+                            } for year in GDP_EXCEL_FILE['Years'].values
+                    ],
+                    value=2022,
+                    clearable=False,
+                    style={"border": "0.2"},
+                ),
+    exchange_dropdown_years = dcc.Dropdown(
+                    id='exchange-year-dropdown',
+                    options=[
+                            {
+                                "label": html.Span(year, style={'color': 'black', 'font-size': 12}),
+                                "value": year,
+                            } for year in GDP_EXCEL_FILE['Years'].values
+                    ],
+                    value=2022,
+                    clearable=False,
+                    style={"border": "0.2"},
+                ),
+    popuplation_card = dbc.Card(
+        [
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.CardImg(
+                            src="/assets/population.jpeg",
+                            className="img-fluid mt-0 mb-0",
+                            style={"height": "153px", "padding": "0", "margin": "0"},
+                        ),
+                        className="col-md-5",
+                    ),
+                    dbc.Col(
+                        dbc.CardBody(
+                            [
+                                html.H4("Population", className="card-title"),
+                                html.Span(pop_dropdown_years),
+                                html.Small(
+                                    "Total population (millions): ",
+                                    className="card-text text-muted",
+                                ),
+                                html.Small(
+                                    id="pop-value",
+                                    className="card-text text-muted",
+                                ),
+                                html.Br(),
+                                html.Small(
+                                    "Growth Rate: ",
+                                    className="card-text text-muted",
+                                ),
+                                html.Small(
+                                    id="pop-rate",
+                                    className="card-text text-muted",
+                                ),
+                            ]
+                        ),
+                        className="col-md-7",
+                    ),
+                ],
+                className="g-0 d-flex align-items-center",
+                style={"padding": "0", "margin": "0"},
+            )
+        ],
+        style={"maxWidth": "540px", "padding": "0"},
+    )
+    exchange_card = dbc.Card(
+        [
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.CardImg(
+                            src="/assets/exchange.png",
+                            className="img-fluid mt-0 mb-0",
+                            style={"height": "153px", "padding": "0", "margin": "0"},
+                        ),
+                        className="col-md-5",
+                    ),
+                    dbc.Col(
+                        dbc.CardBody(
+                            [
+                                html.H4("Exchange", className="card-title"),
+                                html.Span(exchange_dropdown_years),
+                                html.Small(
+                                    "Rwf per US dollar: ",
+                                    className="card-text text-muted",
+                                ),
+                                html.Small(
+                                    id="exchange-value",
+                                    className="card-text text-muted",
+                                ),
+                                html.Br(),
+                                html.Small(
+                                    "Growth Rate: ",
+                                    className="card-text text-muted",
+                                ),
+                                html.Small(
+                                    id="exchange-rate",
+                                    className="card-text text-muted",
+                                ),
+                            ]
+                        ),
+                        className="col-md-7",
+                    ),
+                ],
+                className="g-0 d-flex align-items-center",
+                style={"padding": "0", "margin": "0"},
+            )
+        ],
+        style={"maxWidth": "540px", "padding": "0"},
+    )
     return [html.Div([
+        dbc.Row(
+            [
+                dbc.Col(popuplation_card),
+                dbc.Col(exchange_card),
+                dbc.Col(),
+            ],
+            className="mb-3 mt-2 py-0 px-0",
+        ),
         dbc.Row([
             dbc.Card(
                 [
@@ -392,7 +516,8 @@ def gdp_by_sector_year_dropdown_on_change(radio_items_value):
         fig.add_traces(fig2.data)
         # # Use `hole` to create a donut-like pie chart
         # fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.6)])
-        fig.update_layout(annotations=[dict(text=f"{total} (RWF Billion)", font_size=15, showarrow=False,)], legend={'x': 0, 'y': 4, 'orientation': 'h'})
+        fig.update_layout(annotations=[dict(text=f"{total} (RWF Billion)", font_size=15, showarrow=False,)],
+                          legend={'x': 0, 'y': 4, 'orientation': 'h'})
         # Remove the x-label and y-label
         fig.update_layout(margin_t=30,
                           margin_l=7,
@@ -418,3 +543,35 @@ def gdp_by_sector_year_dropdown_on_change(radio_items_value):
                           margin_r=9,
                           xaxis={'type': 'category'},)
     return fig
+
+
+@callback(
+    [Output("pop-value", "children"), Output("pop-rate", "children")],
+    [
+        Input("pop-year-dropdown", "value"),
+    ],
+)
+def gdp_pop_year_dropdown_on_change(items_value):
+    if GDP_EXCEL_FILE is not None:
+        data = GDP_EXCEL_FILE[['Years', 'Total population (millions)']]
+        data['rate'] = data['Total population (millions)'].pct_change()
+        value = data[data['Years'] == items_value]['Total population (millions)'].values[0]
+        rate = np.round(data[data['Years'] == items_value]['rate'].values[0], 2)*100
+        return [value], [f"{rate}%"]
+    return dash.no_update
+
+
+@callback(
+    [Output("exchange-value", "children"), Output("exchange-rate", "children")],
+    [
+        Input("exchange-year-dropdown", "value"),
+    ],
+)
+def gdp_exchange_year_dropdown_on_change(items_value):
+    if GDP_EXCEL_FILE is not None:
+        data = GDP_EXCEL_FILE[['Years', 'Exchange rate: Rwf per US dollar']]
+        data['rate'] = data['Exchange rate: Rwf per US dollar'].pct_change()
+        value = data[data['Years'] == items_value]['Exchange rate: Rwf per US dollar'].values[0]
+        rate = np.round(data[data['Years'] == items_value]['rate'].values[0], 2)*100
+        return [value], [f"{rate}%"]
+    return dash.no_update
