@@ -140,7 +140,7 @@ def macro_economic_aggregates_content():
                     {"label": "price", "value": 1},
                     {"label": "growth rate", "value": 2},
                 ],
-                value=1,
+                value=2,
                 id="gdp_constant_2017_price-radioitems-inline-input",
                 inline=True,
             ),
@@ -387,7 +387,9 @@ def gdp_at_current_price_fig_on_change(radio_items_value):
                           margin_l=9,
                           margin_b=9,
                           margin_r=9,
-                          xaxis={'type': 'category'})
+                          xaxis={'type': 'category'},
+                          paper_bgcolor='rgb(243, 243, 243)',
+                          plot_bgcolor='rgb(243, 243, 243)',)
     else:
         data = GDP_EXCEL_FILE[['Years', 'GDP at current prices']]
         data['Growth Rate'] = data['GDP at current prices'].pct_change()
@@ -407,7 +409,9 @@ def gdp_at_current_price_fig_on_change(radio_items_value):
                           margin_l=9,
                           margin_b=9,
                           margin_r=9,
-                          xaxis={'type': 'category'},)
+                          xaxis={'type': 'category'},
+                          paper_bgcolor='rgb(243, 243, 243)',
+                          plot_bgcolor='rgb(243, 243, 243)',)
     return fig
 
 
@@ -428,7 +432,9 @@ def gdp_constant_2017_price_fig_on_change(radio_items_value):
                           margin_l=9,
                           margin_b=9,
                           margin_r=9,
-                          xaxis={'type': 'category'},)
+                          xaxis={'type': 'category'},
+                          paper_bgcolor='rgb(243, 243, 243)',
+                          plot_bgcolor='rgb(243, 243, 243)',)
     else:
         data = GDP_EXCEL_FILE[['Years', 'GDP at constant 2017 prices']]
         data['Growth Rate'] = data['GDP at constant 2017 prices'].pct_change()
@@ -447,7 +453,9 @@ def gdp_constant_2017_price_fig_on_change(radio_items_value):
                           margin_l=9,
                           margin_b=9,
                           margin_r=9,
-                          xaxis={'type': 'category'},)
+                          xaxis={'type': 'category'},
+                          paper_bgcolor='rgb(243, 243, 243)',
+                          plot_bgcolor='rgb(243, 243, 243)',)
     return fig
 
 
@@ -468,7 +476,9 @@ def implicit_gdp_deflator_fig_on_change(radio_items_value):
                           margin_l=9,
                           margin_b=9,
                           margin_r=9,
-                          xaxis={'type': 'category'},)
+                          xaxis={'type': 'category'},
+                          paper_bgcolor='rgb(243, 243, 243)',
+                          plot_bgcolor='rgb(243, 243, 243)',)
     else:
         data = GDP_EXCEL_FILE[['Years', 'Implicit GDP deflator']]
         data['Growth Rate'] = data['Implicit GDP deflator'].pct_change()
@@ -488,7 +498,9 @@ def implicit_gdp_deflator_fig_on_change(radio_items_value):
                           margin_l=9,
                           margin_b=9,
                           margin_r=9,
-                          xaxis={'type': 'category'},)
+                          xaxis={'type': 'category'},
+                          paper_bgcolor='rgb(243, 243, 243)',
+                          plot_bgcolor='rgb(243, 243, 243)',)
     return fig
 
 
@@ -523,7 +535,9 @@ def gdp_by_sector_year_dropdown_on_change(radio_items_value):
                           margin_l=7,
                           margin_b=7,
                           margin_r=0,
-                          xaxis={'type': 'category'},)
+                          xaxis={'type': 'category'},
+                          paper_bgcolor='rgb(243, 243, 243)',
+                          plot_bgcolor='rgb(243, 243, 243)',)
     else:
         fig = go.Figure()
         for col in labels:
@@ -541,7 +555,9 @@ def gdp_by_sector_year_dropdown_on_change(radio_items_value):
                           margin_l=9,
                           margin_b=9,
                           margin_r=9,
-                          xaxis={'type': 'category'},)
+                          xaxis={'type': 'category'},
+                          paper_bgcolor='rgb(243, 243, 243)',
+                          plot_bgcolor='rgb(243, 243, 243)',)
     return fig
 
 
