@@ -1,5 +1,5 @@
 import pandas as pd
-from dash import dcc, html
+from dash import dcc, html, callback, Output, Input
 import os
 import dash_bootstrap_components as dbc
 from config import CONFIG
@@ -34,10 +34,13 @@ def load_data(sheet_name):
 
 def generate_other_indices_plots():
     graphs = []
-    data = CPI_EXCEL_FILE.copy()
+    data = CPI_EXCEL_FILE
 
     # Get the months
     months = pd.to_datetime(data["Urban"]["Date"][1:]).dt.strftime("%b %Y")
+
+    # years
+    years = sorted(pd.to_datetime(data["Urban"]["Date"][1:]).dt.year.unique())
 
     # Plot 1: Urban vs. Rural vs. All Rwanda CPI
     graph1 = dcc.Graph(
@@ -100,33 +103,30 @@ def generate_other_indices_plots():
     ], color="#284fa1", outline=False))
 
     # Plot 3: CPI Yearly for Urban
-    graph3 = dcc.Graph(
-        id='plot3',
-        figure={
-            'data': [
-                {
-                    'x': pd.to_datetime(data["Urban"]["Date"][1:]).dt.strftime('%B').iloc[mask.values],
-                    'y': data["Urban"]["GENERAL INDEX (CPI)"][1:].iloc[mask.values],
-                    'type': 'line',
-                    'name': str(year)
-                }
-                for year in pd.to_datetime(data["Urban"]["Date"][1:]).dt.year.unique()
-                for mask in [pd.to_datetime(data["Urban"]["Date"][1:]).dt.year == year]
-            ],
-            'layout': {
-                'title': '',
-                'xaxis': {
-                    'ticktext': ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                                 'August', 'September', 'October', 'November', 'December']
-                },
-                'paper_bgcolor': 'rgb(243, 243, 243)',
-                'plot_bgcolor': 'rgb(243, 243, 243)',
-            }
-        }, config=CONFIG
-    )
+    graph3 = dcc.Graph(id='combined-cpi-yearly-plot')
 
     graphs.append(dbc.Card([
-        dbc.CardHeader("CPI Yearly (Urban)", style={"color": "white", 'font-size': 20},),
+        dbc.CardHeader([
+            dbc.Row(
+                [
+                    dbc.Col(html.Span(id='cpi-year-title')),
+                    dbc.Col([
+                        # year selection
+                        dcc.Dropdown(
+                            id='cpi-year-dropdown',
+                            options=[
+                                {
+                                    "label": html.Span(year, style={'color': 'black'}),
+                                    "value": year,
+                                } for year in years
+                            ],
+                            value=years[-1],  # Default value is the latest year
+                            clearable=False
+                        ),
+                    ])
+                ]
+            )
+        ], style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
                 html.Div([
@@ -137,33 +137,30 @@ def generate_other_indices_plots():
     ], color="#284fa1", outline=False))
 
     # Plot 4: CPI Yearly for Rural
-    graph4 = dcc.Graph(
-        id='plot4',
-        figure={
-            'data': [
-                {
-                    'x': pd.to_datetime(data["Rural"]["Date"][1:]).dt.strftime('%B').iloc[mask.values],
-                    'y': data["Rural"]["GENERAL INDEX (CPI)"][1:].iloc[mask.values],
-                    'type': 'line',
-                    'name': str(year)
-                }
-                for year in pd.to_datetime(data["Rural"]["Date"][1:]).dt.year.unique()
-                for mask in [pd.to_datetime(data["Rural"]["Date"][1:]).dt.year == year]
-            ],
-            'layout': {
-                'title': 'CPI Yearly (Rural)',
-                'xaxis': {
-                    'ticktext': ['January', 'February', 'March', 'April', 'May', 'June',
-                                 'July', 'August', 'September', 'October', 'November', 'December']
-                },
-                'paper_bgcolor': 'rgb(243, 243, 243)',
-                'plot_bgcolor': 'rgb(243, 243, 243)',
-            }
-        },
-        config=CONFIG
-    )
+    graph4 = dcc.Graph(id='combined-cpi-monthly-change-plot')
+
     graphs.append(dbc.Card([
-        dbc.CardHeader("CPI Yearly (Rural)", style={"color": "white", 'font-size': 20},),
+        dbc.CardHeader([
+            dbc.Row(
+                [
+                    dbc.Col(html.Span(id='cpi-year-title-2')),
+                    dbc.Col([
+                        # year selection
+                        dcc.Dropdown(
+                            id='cpi-year-dropdown-2',
+                            options=[
+                                {
+                                    "label": html.Span(year, style={'color': 'black'}),
+                                    "value": year,
+                                } for year in years
+                            ],
+                            value=years[-1],  # Default value is the latest year
+                            clearable=False
+                        ),
+                    ])
+                ]
+            )
+        ], style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
                 html.Div([
@@ -211,3 +208,95 @@ def get_content():
         ),
         html.Div([content], id="graphs-container", style={'background-color': '#DCDCDC', "margin-top": "0rem"})])
     ]
+
+
+@callback(
+        [Output('combined-cpi-yearly-plot', 'figure'),
+         Output('cpi-year-title', 'children')],
+        [Input('cpi-year-dropdown', 'value')]
+)
+def update_graph(selected_year):
+    mask_urban = pd.to_datetime(CPI_EXCEL_FILE["Urban"]["Date"][1:]).dt.year == selected_year
+    mask_rural = pd.to_datetime(CPI_EXCEL_FILE["Rural"]["Date"][1:]).dt.year == selected_year
+    mask_all_rwanda = pd.to_datetime(CPI_EXCEL_FILE["All Rwanda"]["Date"][1:]).dt.year == selected_year
+
+    graph = {
+        'data': [
+            {
+                'x': pd.to_datetime(CPI_EXCEL_FILE["Urban"]["Date"][1:]).dt.strftime('%B').iloc[mask_urban.values],
+                'y': CPI_EXCEL_FILE["Urban"]["GENERAL INDEX (CPI)"][1:].iloc[mask_urban.values],
+                'type': 'line',
+                'name': 'Urban'
+            },
+            {
+                'x': pd.to_datetime(CPI_EXCEL_FILE["Rural"]["Date"][1:]).dt.strftime('%B').iloc[mask_rural.values],
+                'y': CPI_EXCEL_FILE["Rural"]["GENERAL INDEX (CPI)"][1:].iloc[mask_rural.values],
+                'type': 'line',
+                'name': 'Rural'
+            },
+            {
+                'x': pd.to_datetime(CPI_EXCEL_FILE["All Rwanda"]["Date"][1:]).dt.strftime('%B').iloc[mask_all_rwanda.values],
+                'y': CPI_EXCEL_FILE["All Rwanda"]["GENERAL INDEX (CPI)"][1:].iloc[mask_all_rwanda.values],
+                'type': 'line',
+                'name': 'All Rwanda'
+            }
+        ],
+        'layout': {
+            'title': '',
+            'xaxis': {
+                'ticktext': ['January', 'February', 'March', 'April', 'May',
+                             'June', 'July', 'August', 'September', 'October', 'November', 'December']
+            }
+        }
+    }
+    title = f'CPI Monthly for {selected_year}'
+    return graph, title
+
+
+@callback(
+        [Output('combined-cpi-monthly-change-plot', 'figure'),
+         Output('cpi-year-title-2', 'children')],
+        [Input('cpi-year-dropdown-2', 'value')]
+)
+def update_monthly_change_graph(selected_year):
+    mask_urban = pd.to_datetime(CPI_EXCEL_FILE["Urban"]["Date"][1:]).dt.year == selected_year
+    mask_rural = pd.to_datetime(CPI_EXCEL_FILE["Rural"]["Date"][1:]).dt.year == selected_year
+    mask_all_rwanda = pd.to_datetime(CPI_EXCEL_FILE["All Rwanda"]["Date"][1:]).dt.year == selected_year
+    monthly_change_urban = CPI_EXCEL_FILE["Urban"]["GENERAL INDEX (CPI)"][1:].pct_change() * 100
+    monthly_change_rural = CPI_EXCEL_FILE["Rural"]["GENERAL INDEX (CPI)"][1:].pct_change() * 100
+    monthly_change_all_rwanda = CPI_EXCEL_FILE["All Rwanda"]["GENERAL INDEX (CPI)"][1:].pct_change() * 100
+
+    graph = {
+        'data': [
+            {
+                'x': pd.to_datetime(CPI_EXCEL_FILE["Urban"]["Date"][1:]).dt.strftime('%B').iloc[mask_urban.values],
+                'y': monthly_change_urban.iloc[mask_urban.values],
+                'type': 'line',
+                'name': 'Urban'
+            },
+            {
+                'x': pd.to_datetime(CPI_EXCEL_FILE["Rural"]["Date"][1:]).dt.strftime('%B').iloc[mask_rural.values],
+                'y': monthly_change_rural.iloc[mask_rural.values],
+                'type': 'line',
+                'name': 'Rural'
+            },
+            {
+                'x': pd.to_datetime(CPI_EXCEL_FILE["All Rwanda"]["Date"][1:]).dt.strftime('%B').iloc[mask_all_rwanda.values],
+                'y': monthly_change_all_rwanda.iloc[mask_all_rwanda.values],
+                'type': 'line',
+                'name': 'All Rwanda'
+            }
+        ],
+        'layout': {
+            'title': "",
+            'xaxis': {
+                'ticktext': ['January', 'February', 'March', 'April', 'May', 'June',
+                             'July', 'August', 'September', 'October', 'November', 'December']
+            },
+            'yaxis': {
+                'title': 'Monthly Change (%)'
+            }
+        }
+    }
+    title = f'CPI Monthly Change for {selected_year}'
+    return graph, title
