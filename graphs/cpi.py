@@ -246,7 +246,9 @@ def update_graph(selected_year):
             'xaxis': {
                 'ticktext': ['January', 'February', 'March', 'April', 'May',
                              'June', 'July', 'August', 'September', 'October', 'November', 'December']
-            }
+            },
+            'paper_bgcolor': 'rgb(243, 243, 243)',
+            'plot_bgcolor': 'rgb(243, 243, 243)',
         }
     }
     title = f'CPI Monthly for {selected_year}'
@@ -295,7 +297,9 @@ def update_monthly_change_graph(selected_year):
             },
             'yaxis': {
                 'title': 'Monthly Change (%)'
-            }
+            },
+            'paper_bgcolor': 'rgb(243, 243, 243)',
+            'plot_bgcolor': 'rgb(243, 243, 243)',
         }
     }
     title = f'CPI Monthly Change for {selected_year}'

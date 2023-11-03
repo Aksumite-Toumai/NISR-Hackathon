@@ -7,7 +7,6 @@ from config import CONFIG
 from dash import callback, Output, Input
 import plotly.express as px
 import plotly.graph_objects as go
-import dash
 import numpy as np
 
 
@@ -54,11 +53,14 @@ def get_proportions_of_gdp_by_sectors():
                     value=2022,
                     clearable=False,
                 ),
-
+    # "Proportion of GDP by Sectors",
     content = dbc.Card([
         dbc.CardHeader([
-            "Proportion of GDP by Sectors", html.Hr(),
-            html.Div(dropdown_years)], style={"color": "white", 'font-size': 20},),
+            dbc.Row([
+                dbc.Col("Proportion of GDP by Sectors"),
+                dbc.Col(dropdown_years)
+                ])], style={"color": "white", 'font-size': 20}
+        ),
         dbc.CardBody(
             [
                 html.Div([
@@ -88,8 +90,11 @@ def get_proportions_of_gdp_constant_2017_by_sectors():
 
     content = dbc.Card([
         dbc.CardHeader([
-            "Proportion of GDP by Sectors - At Constant 2017 Prices", html.Hr(),
-            html.Div(dropdown_years)], style={"color": "white", 'font-size': 20},),
+            dbc.Row([
+                dbc.Col("Proportion of GDP by Sectors - At Constant 2017 Prices"),
+                dbc.Col(dropdown_years, )
+                ])], style={"color": "white", 'font-size': 20}
+        ),
         dbc.CardBody(
             [
                 html.Div([
@@ -119,10 +124,12 @@ def macro_economic_aggregates_content():
     )
     gdp_current_price_card = dbc.Card([
         dbc.CardHeader([
-            dbc.Col("GDP at current prices",),
-            dbc.Col(
-                gdp_current_price_inline_radioitems, className="d-flex justify-content-end class",
-            )
+            dbc.Row([
+                dbc.Col("GDP at current prices",),
+                dbc.Col(
+                    gdp_current_price_inline_radioitems, className="d-flex justify-content-end class",
+                )
+            ])
         ], style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
@@ -148,10 +155,12 @@ def macro_economic_aggregates_content():
     )
     gdp_constant_price_2017_card = dbc.Card([
         dbc.CardHeader([
-            dbc.Col("GDP at constant 2017 prices",),
-            dbc.Col(
-                gdp_constant_2017_price_inline_radioitems, className="d-flex justify-content-end class",
-            )
+            dbc.Row([
+                dbc.Col("GDP at constant 2017 prices",),
+                dbc.Col(
+                    gdp_constant_2017_price_inline_radioitems, className="d-flex justify-content-end class",
+                )
+            ])
         ], style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
@@ -177,15 +186,52 @@ def macro_economic_aggregates_content():
     )
     implicit_gdp_deflator_card = dbc.Card([
         dbc.CardHeader([
-            dbc.Col("Implicit GDP deflator",),
-            dbc.Col(
-                implicit_gdp_deflator_inline_radioitems, className="d-flex justify-content-end class",
+            dbc.Row([
+                dbc.Col("Implicit GDP deflator",),
+                dbc.Col(
+                    implicit_gdp_deflator_inline_radioitems, className="d-flex justify-content-end class",
+                )
+            ]
             )
         ], style={"color": "white", 'font-size': 20},),
         dbc.CardBody(
             [
                 html.Div([
                     dcc.Graph(id='implicit_gdp_deflator_fig', config=CONFIG)
+                ])
+            ], style={"padding": "0"},
+        ),
+    ], color="#284fa1", outline=False)
+
+    expenditure = dbc.Card([
+        dbc.CardHeader([
+            dbc.Row([
+                dbc.Col("Expenditure on GDP (Billion Frw)",),
+                dbc.Col(
+                    # year selection
+                    dcc.Dropdown(
+                        id='expenditure-gdp-dropdown',
+                        options=[
+                            {
+                                "label": html.Span("GDP at current prices", style={'color': 'black'}),
+                                "value": 1,
+                            },
+                            {
+                                "label": html.Span("GDP at constant 2017 prices", style={'color': 'black'}),
+                                "value": 2,
+                            },
+                        ],
+                        value=1,
+                        clearable=False
+                    ),
+                )
+            ]
+            )
+        ], style={"color": "white", 'font-size': 20},),
+        dbc.CardBody(
+            [
+                html.Div([
+                    dcc.Graph(id='expenditure_fig', config=CONFIG)
                 ])
             ], style={"padding": "0"},
         ),
@@ -200,6 +246,12 @@ def macro_economic_aggregates_content():
             [
                 dbc.Col(get_proportions_of_gdp_by_sectors(), width=6),
                 dbc.Col(implicit_gdp_deflator_card, width=6),
+            ],
+            className="mb-3 mt-2",
+        ),
+        dbc.Row(
+            [
+                dbc.Col(expenditure, width=8),
                 dbc.Col(),
             ],
             className="mb-3 mt-2",
@@ -209,11 +261,11 @@ def macro_economic_aggregates_content():
 
 
 def get_content():
-    tabs = (" Macro-Economic Aggregates",
-            "GDP by Kind of Activity at Current Price",
-            "GDP by Kind of Activity at constant 2017 prices",
-            "GDP by Kind of Activity Deflators",
-            "Expenditure on GDP")
+    tabs = [" Macro-Economic Aggregates"]
+    # "GDP by Kind of Activity at Current Price",
+    # "GDP by Kind of Activity at constant 2017 prices",
+    # "GDP by Kind of Activity Deflators",
+    # "Expenditure on GDP")
     pop_dropdown_years = dcc.Dropdown(
                     id='pop-year-dropdown',
                     options=[
@@ -373,8 +425,6 @@ def tab_content(active_tab):
     ],
 )
 def gdp_at_current_price_fig_on_change(radio_items_value):
-    if GDP_EXCEL_FILE is None:
-        return None
     if radio_items_value == 1:
         fig = px.scatter(GDP_EXCEL_FILE, x="Years", y="GDP at current prices", color="GDP at current prices",
                          size='GDP at current prices',
@@ -568,13 +618,11 @@ def gdp_by_sector_year_dropdown_on_change(radio_items_value):
     ],
 )
 def gdp_pop_year_dropdown_on_change(items_value):
-    if GDP_EXCEL_FILE is not None:
-        data = GDP_EXCEL_FILE[['Years', 'Total population (millions)']]
-        data['rate'] = data['Total population (millions)'].pct_change()
-        value = data[data['Years'] == items_value]['Total population (millions)'].values[0]
-        rate = np.round(data[data['Years'] == items_value]['rate'].values[0], 2)*100
-        return [value], [f"{rate}%"]
-    return dash.no_update
+    data = GDP_EXCEL_FILE[['Years', 'Total population (millions)']]
+    data['rate'] = data['Total population (millions)'].pct_change()
+    value = data[data['Years'] == items_value]['Total population (millions)'].values[0]
+    rate = np.round(data[data['Years'] == items_value]['rate'].values[0], 2)*100
+    return [value], [f"{rate}%"]
 
 
 @callback(
@@ -584,10 +632,45 @@ def gdp_pop_year_dropdown_on_change(items_value):
     ],
 )
 def gdp_exchange_year_dropdown_on_change(items_value):
-    if GDP_EXCEL_FILE is not None:
-        data = GDP_EXCEL_FILE[['Years', 'Exchange rate: Rwf per US dollar']]
-        data['rate'] = data['Exchange rate: Rwf per US dollar'].pct_change()
-        value = data[data['Years'] == items_value]['Exchange rate: Rwf per US dollar'].values[0]
-        rate = np.round(data[data['Years'] == items_value]['rate'].values[0], 2)*100
-        return [value], [f"{rate}%"]
-    return dash.no_update
+    data = GDP_EXCEL_FILE[['Years', 'Exchange rate: Rwf per US dollar']]
+    data['rate'] = data['Exchange rate: Rwf per US dollar'].pct_change()
+    value = data[data['Years'] == items_value]['Exchange rate: Rwf per US dollar'].values[0]
+    rate = np.round(data[data['Years'] == items_value]['rate'].values[0], 2)*100
+    return [value], [f"{rate}%"]
+
+
+@callback(
+    Output("expenditure_fig", "figure"),
+    Input("expenditure-gdp-dropdown", "value"))
+def update_expenditure_bar_chart(value):
+    cols = ["Resource balance", "Gross capital formation", "Private (includes changes in stock)", "Government"]
+    years = list(GDP_EXCEL_FILE['Years'].values)
+
+    if value == 1:
+        # Create traces
+        fig = go.Figure(data=[
+            go.Bar(name=col, x=years,
+                   y=list(GDP_EXCEL_FILE[col]*GDP_EXCEL_FILE['GDP at current prices'])) for col in cols
+        ])
+        fig.add_trace(go.Scatter(x=years, y=list(GDP_EXCEL_FILE['GDP at current prices']),
+                                 mode='lines', name='GDP', marker_color='black'))
+    else:
+        # Create traces
+        fig = go.Figure(data=[
+            go.Bar(name=col, x=years,
+                   y=list(GDP_EXCEL_FILE[col]*GDP_EXCEL_FILE['GDP at constant 2017 prices'])) for col in cols
+        ])
+        fig.add_trace(go.Scatter(x=years, y=list(GDP_EXCEL_FILE['GDP at constant 2017 prices']),
+                                 mode='lines', name='GDP', marker_color='black'))
+
+    fig.update_layout(barmode='relative',
+                      legend={'x': 0, 'y': 4, 'orientation': 'h'},
+                      xaxis={'type': 'category'},
+                      margin_t=30,
+                      margin_l=9,
+                      margin_b=9,
+                      margin_r=9,
+                      paper_bgcolor='rgb(243, 243, 243)',
+                      plot_bgcolor='rgb(243, 243, 243)',
+                      )
+    return fig
