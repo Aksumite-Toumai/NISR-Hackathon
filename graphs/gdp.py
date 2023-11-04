@@ -234,6 +234,39 @@ def macro_economic_aggregates_content():
         ),
     ], color="#284fa1", outline=False)
 
+    corr_dropdown = dbc.DropdownMenu(
+        label="Select Columns",
+        children=[
+            dcc.Checklist(
+                id='correlation-gdp-dropdown',
+                options=[
+                    {
+                        "label": html.Span(col, style={'color': 'black', 'font-size': 12}),
+                        "value": col,
+                    } for col in GDP_EXCEL_FILE.columns[1:]
+                ],
+                value=GDP_EXCEL_FILE.columns[1:4],
+                labelStyle={"display": "flex", "align-items": "center"},
+            ),
+        ],
+    )
+    correlation_card = dbc.Card([
+        dbc.CardHeader([
+            dbc.Row([
+                dbc.Col("Correlation Heatmap",),
+                dbc.Col(corr_dropdown, className="d-flex justify-content-end")
+            ]
+            )
+        ], style={"color": "white", 'font-size': 20},),
+        dbc.CardBody(
+            [
+                html.Div([
+                    dcc.Graph(id='correlation_heatmap_fig', config=CONFIG)
+                ])
+            ], style={"padding": "0"},
+        ),
+    ], color="#284fa1", outline=False)
+
     content = html.Div([
         dbc.Row([
             dbc.Col(gdp_current_price_card, width=6),
@@ -248,8 +281,8 @@ def macro_economic_aggregates_content():
         ),
         dbc.Row(
             [
-                dbc.Col(expenditure, width=8),
-                dbc.Col(),
+                dbc.Col(expenditure, width=7),
+                dbc.Col(correlation_card, width=5),
             ],
             className="mb-3 mt-2",
         ),
@@ -670,4 +703,22 @@ def update_expenditure_bar_chart(value):
                       paper_bgcolor='rgb(243, 243, 243)',
                       plot_bgcolor='rgb(243, 243, 243)',
                       )
+    return fig
+
+
+@callback(
+    Output("correlation_heatmap_fig", "figure"),
+    Input("correlation-gdp-dropdown", "value"))
+def update_correlation_heatmap_chart(value):
+    df = GDP_EXCEL_FILE[value]
+    fig = px.imshow(df.corr(), text_auto=True, aspect="auto")
+    fig.update_layout(legend=None,
+                      margin_t=30,
+                      margin_l=9,
+                      margin_b=9,
+                      margin_r=9,
+                      paper_bgcolor='rgb(243, 243, 243)',
+                      plot_bgcolor='rgb(243, 243, 243)',
+                      )
+    fig.update_xaxes(side="top")
     return fig
