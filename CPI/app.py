@@ -13,7 +13,6 @@ months = pd.to_datetime(data["Urban"]["Date"][1:]).dt.strftime("%b %Y")
 # years
 years = sorted(pd.to_datetime(data["Urban"]["Date"][1:]).dt.year.unique())
 
-
 app = dash.Dash(__name__)
 
 
@@ -62,6 +61,28 @@ app.layout = html.Div([
     ),
     dcc.Graph(id='combined-cpi-monthly-change-plot'
     ),
+    # CPI annual change
+        dcc.Graph(
+        id='cpi-annual-change',
+        figure={
+            'data': [
+            {'x': data['Urban']['Date'][1:], 'y':data["Urban"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100, 'type': 'line', 'name': 'Urban'},
+            {'x': data['Rural']['Date'][1:], 'y': data["Rural"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100, 'type': 'line', 'name': 'Rural'},
+            {'x': data['All Rwanda']['Date'][1:], 'y': data["All Rwanda"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100, 'type': 'line', 'name': 'All Rwanda'}
+            ],
+            'layout': {
+                'title': 'CPI Annual Change',
+                'xaxis': {
+                    'tickmode': 'linear',
+                    'dtick': "M12",
+                    'tickformat': "%Y"
+                },
+                'yaxis': {
+                    'title': 'Annual Change (%)'
+                }
+            }
+        }
+    )
 
 ])
 
