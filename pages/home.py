@@ -1,6 +1,6 @@
-import dash
+import dash  # type: ignore
 from dash import html, dcc, callback, Input, Output, ctx
-import dash_bootstrap_components as dbc
+import dash_bootstrap_components as dbc  # type: ignore
 from graphs import cpi, gdp, pivottable, view
 
 

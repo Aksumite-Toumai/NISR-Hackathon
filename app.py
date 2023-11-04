@@ -3,7 +3,6 @@ import os  # type: ignore
 from dash import Dash, html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc  # type: ignore
 from flask import Flask
-from dotenv import load_dotenv
 import logging
 import db
 import auth
@@ -19,10 +18,6 @@ logging.basicConfig(
     ]
 )
 
-# Load env variables
-if os.path.exists('.env'):
-    load_dotenv()
-    logging.info('Env variables loaded.')
 
 # Initialize Flask app
 FLASK_APP = Flask(__name__, instance_relative_config=True)

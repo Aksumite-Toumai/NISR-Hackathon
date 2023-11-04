@@ -1,13 +1,14 @@
-import pandas as pd
-from dash import dcc, html, callback, Output, Input
+import pandas as pd  # type: ignore
+from dash import dcc, html, callback, Output, Input  # type: ignore
 import os
-import dash_bootstrap_components as dbc
+import dash_bootstrap_components as dbc  # type: ignore
 from config import CONFIG
 import logging
 
 
-DATASETS_PATH = os.environ.get("DATA_PATH")
-CPI_PATH = os.path.join(DATASETS_PATH, "Consumer Price Index/CPI.xlsm")
+# Path to datasets main folder
+DATASETS_PATH = ""
+CPI_PATH = "CPI.xlsm"
 
 # read the CPI excel file
 CPI_EXCEL_FILE = None

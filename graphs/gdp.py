@@ -1,20 +1,17 @@
-from dash import html, dcc
-import dash_bootstrap_components as dbc
+from dash import html, dcc  # type: ignore
+import dash_bootstrap_components as dbc  # type: ignore
 import os
-import pandas as pd
+import pandas as pd  # type: ignore
 import logging
 from config import CONFIG
 from dash import callback, Output, Input
-import plotly.express as px
-import plotly.graph_objects as go
+import plotly.express as px  # type: ignore
+import plotly.graph_objects as go  # type: ignore
 import numpy as np
 
 
-# datasets main directory
-DATASETS_PATH = os.environ.get("DATA_PATH")
-
-# GDP file path
-GDP_PATH = os.path.join(DATASETS_PATH, "GDP National Accounts/R_GDP National Accounts 2022_r.xls")
+# Path to GDP excel file
+GDP_PATH = "R_GDP National Accounts 2022_r.xls"
 
 # read the GDP excel file
 GDP_EXCEL_FILE = None

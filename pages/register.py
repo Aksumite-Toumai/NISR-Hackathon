@@ -1,6 +1,6 @@
-import dash
+import dash  # type: ignore
 from dash import html, dcc
-import dash_bootstrap_components as dbc
+import dash_bootstrap_components as dbc  # type: ignore
 
 
 dash.register_page(__name__)
@@ -72,4 +72,3 @@ layout = html.Section([
         ], className="row d-flex justify-content-center align-items-center h-100")
     ], className="container py-5 h-100")
 ], className="h-100 gradient-form", style={"background-color": '#eee'})
-

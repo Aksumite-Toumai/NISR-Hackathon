@@ -1,19 +1,20 @@
-import dash_pivottable
-from dash import html, dcc, callback, Input, Output, State
+import dash_pivottable  # type: ignore
+from dash import html, dcc, callback, Input, Output, State  # type: ignore
 import os
-import dash_bootstrap_components as dbc
-import pandas as pd
-import numpy as np
-from graphs import gdp
+import dash_bootstrap_components as dbc  # type: ignore
+import pandas as pd  # type: ignore
+import numpy as np  # type: ignore
+from graphs import gdp  # type: ignore
+from typing import List
 
 
-DATASETS_PATH = os.environ.get("DATA_PATH")
+DATASETS_PATH = ""
 DATASETS = {
-    "Consumer Price Index": "Consumer Price Index/CPI_time_series_November_2022.xls",
-    "GDP National Accounts": "GDP National Accounts/R_GDP National Accounts 2022_r.xls",
+    "Consumer Price Index": "CPI_time_series_November_2022.xls",
+    "GDP National Accounts": "R_GDP National Accounts 2022_r.xls",
 }
-CURRENT_DATA = []
-OPTIONS = []
+CURRENT_DATA: List = []
+OPTIONS: List = []
 
 
 # Create the dropdown button to select a dataset

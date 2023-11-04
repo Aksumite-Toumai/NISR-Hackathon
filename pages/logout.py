@@ -1,4 +1,4 @@
-import dash
+import dash  # type: ignore
 from dash import html
 
 

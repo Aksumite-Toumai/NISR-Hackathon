@@ -1,5 +1,5 @@
-from dash import html, dcc
-import dash_bootstrap_components as dbc
+from dash import html, dcc  # type: ignore
+import dash_bootstrap_components as dbc  # type: ignore
 import dash
 
 
@@ -58,12 +58,15 @@ layout = html.Div(
                             className="nav-item",
                             children=[
                                  html.A(
-                                    className="nav-link collapsed", href="#", **{'data-toggle': "collapse"}, **{'data-target': "#collapseTwo"},
+                                    className="nav-link collapsed",
+                                    href="#", **{'data-toggle': "collapse"}, **{'data-target': "#collapseTwo"},
                                     **{'aria-expanded': "true"}, **{'aria-controls': "collapseTwo"},
                                     children=html.Span("CONTACTS")
                                 ),
                                 html.Div(
-                                    id="collapseTwo", className="collapse",**{'aria-labelledby':"headingTwo"},**{'data-parent':"#accordionSidebar"},
+                                    id="collapseTwo",
+                                    className="collapse", **{'aria-labelledby': "headingTwo"},
+                                    **{'data-parent': "#accordionSidebar"},
                                     children=html.Div(
                                         className="bg-white py-2 collapse-inner rounded",
                                         children=[
