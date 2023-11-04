@@ -3,6 +3,7 @@ from dash import dcc
 from dash import html
 import plotly.graph_objects as go
 import pandas as pd
+import plotly.express as px
 
 
 data = pd.read_excel("CPI.xlsm", sheet_name=None)
@@ -57,9 +58,11 @@ app.layout = html.Div([
         value=years[-1],  # Default value is the latest year
         clearable=False
     ),
-    dcc.Graph(id='combined-cpi-yearly-plot'
+    dcc.Graph(id='combined-cpi-yearly-plot' # CPI monthly for selected year
     ),
-    dcc.Graph(id='combined-cpi-monthly-change-plot'
+    dcc.Graph(id='combined-cpi-monthly-change-plot' # CPI monthly change for selected year
+    ),
+    dcc.Graph(id='combined-cpi-monthly-change-histogram' # histogram of CPI values for selected year
     ),
     # CPI annual change
         dcc.Graph(
@@ -168,6 +171,30 @@ def update_monthly_change_graph(selected_year):
             }
         }
     }
+
+@app.callback(
+    dash.dependencies.Output('combined-cpi-monthly-change-histogram', 'figure'),
+    [dash.dependencies.Input('year-dropdown', 'value')]
+)
+
+def update_cpi_histogram(selected_year):
+    mask_urban = pd.to_datetime(data["Urban"]["Date"][1:]).dt.year == selected_year
+    mask_rural = pd.to_datetime(data["Rural"]["Date"][1:]).dt.year == selected_year
+    mask_all_rwanda = pd.to_datetime(data["All Rwanda"]["Date"][1:]).dt.year == selected_year
+
+    cpi_urban = data["Urban"]["GENERAL INDEX (CPI)"][1:][mask_urban]
+    cpi_rural = data["Rural"]["GENERAL INDEX (CPI)"][1:][mask_rural]
+    cpi_all_rwanda = data["All Rwanda"]["GENERAL INDEX (CPI)"][1:][mask_all_rwanda]
+
+    cpi_data = pd.DataFrame({'Urban': cpi_urban, 'Rural': cpi_rural, 'All Rwanda': cpi_all_rwanda}).reset_index(drop=True)
+
+    long_format_data = cpi_data.melt(var_name='Region', value_name='CPI')
+
+    fig = px.histogram(long_format_data, x='CPI', color='Region', barmode='overlay')
+
+    fig.update_layout(title=f'CPI Values for {selected_year}', xaxis_title='CPI', yaxis_title='Count')
+
+    return fig
 
 
 # Run the Dash app
