@@ -1,4 +1,4 @@
-import dash
+import dash  # type: ignore
 from dash import html, dcc
 
 
@@ -14,15 +14,16 @@ layout = html.Section([
                     html.Div([
                         html.Div([
                             html.Div([
-                                html.Div([
-                                    dcc.Dropdown([
-                                        {"label": html.Span(['English'],
-                                                            style={'color': '#284fa1', 'font-size': 15}), "value": "en"},
-                                        {"label": html.Span(['Kinyarwanda'],
-                                                            style={'color': '#284fa1', 'font-size': 15}), "value": "rw"},
-                                        {"label": html.Span(['French'],
-                                                            style={'color': '#284fa1', 'font-size': 15}), "value": "fr"}
-                                                  ], value='en', clearable=False, style={"width": "125px"})], className="row"),
+                                # html.Div([
+                                #     dcc.Dropdown([
+                                #         {"label": html.Span(['English'],
+                                #                             style={'color': '#284fa1', 'font-size': 15}), "value": "en"},
+                                #         {"label": html.Span(['Kinyarwanda'],
+                                #                             style={'color': '#284fa1', 'font-size': 15}), "value": "rw"},
+                                #         {"label": html.Span(['French'],
+                                #                             style={'color': '#284fa1', 'font-size': 15}), "value": "fr"}
+                                #                   ],
+                                # value='en', clearable=False, style={"width": "125px"})], className="row"),
                                 html.Div([
                                     html.Img(src="/assets/nisr_logo.png",
                                              style={"width": "285px"}, alt="nisr logo")

@@ -1,7 +1,7 @@
-import dash
+import dash  # type: ignore
 from dash import html, dcc, callback, Input, Output, ctx
-import dash_bootstrap_components as dbc
-from graphs import cpi, gdp, lfs
+import dash_bootstrap_components as dbc  # type: ignore
+from graphs import cpi, gdp, pivottable, view
 
 
 dash.register_page(__name__)
@@ -77,12 +77,7 @@ def layout():
                                 href="#",
                                 style={'color': "#696969"},
                                 className="nav-link nav-home-link",
-                                id="GDP"),
-                    dbc.NavLink("Labour Force Survey",
-                                href="#",
-                                style={'color': "#696969"},
-                                className="nav-home-link",
-                                id="LFS"),
+                                id="GDP")
                 ],
                 vertical=True,
                 pills=True,
@@ -107,7 +102,28 @@ def layout():
                 ],
                 vertical=True,
                 pills=True,
-            )
+            ),
+            html.Hr(),
+            html.P([
+                html.I(className="fa fa-table fa-lg"),
+                dbc.Label("Data", style={'padding-left': '0.5rem'})
+                ], style={'margin': '0rem', 'margin-left': '1rem', "color": "#284fa1"}),
+            dbc.Nav(
+                [
+                    dbc.NavLink("View",
+                                href="#",
+                                style={'color': "#696969"},
+                                className="nav-link nav-home-link",
+                                id="View-Data"),
+                    dbc.NavLink("Pivot Table",
+                                href="#",
+                                style={'color': "#696969"},
+                                className="nav-link nav-home-link",
+                                id="Pivot-Table"),
+                ],
+                vertical=True,
+                pills=True,
+            ),
         ],
         style=SIDEBAR_STYLE,
     )
@@ -122,13 +138,16 @@ def layout():
 @callback([Output("home-page-content", "children")],
           [Input("CPI", "n_clicks"),
            Input("GDP", "n_clicks"),
-           Input("LFS", "n_clicks"),])
-def render_hone_page_content(btn1, btn2, btn3):
+           Input("View-Data", "n_clicks"),
+           Input("Pivot-Table", "n_clicks"),])
+def render_hone_page_content(btn1, btn2, btn4, btn5):
     button_clicked = ctx.triggered_id
     match button_clicked:
         case "GDP":
             return gdp.get_content()
-        case "LFS":
-            return lfs.get_content()
+        case "View-Data":
+            return view.get_content()
+        case "Pivot-Table":
+            return pivottable.get_content()
         case _:
             return cpi.get_content()
