@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.express as px
 
 
-data = pd.read_excel("CPI.xlsm", sheet_name=None)
+data = pd.read_excel("CPI_time_series_September_2023.xlsm", sheet_name=None)
 
 # Get the months
 months = pd.to_datetime(data["Urban"]["Date"][1:]).dt.strftime("%b %Y")
@@ -15,7 +15,6 @@ months = pd.to_datetime(data["Urban"]["Date"][1:]).dt.strftime("%b %Y")
 years = sorted(pd.to_datetime(data["Urban"]["Date"][1:]).dt.year.unique())
 
 app = dash.Dash(__name__)
-
 
 app.layout = html.Div([
 
@@ -85,8 +84,10 @@ app.layout = html.Div([
                 }
             }
         }
-    )
-
+    ),
+    # CPI bar chart
+        dcc.Dropdown(id='region-selector', options=[{'label': name, 'value': name} for name in ['Urban', 'Rural', 'All Rwanda']], value='Urban'),
+        dcc.Graph(id='cpi-bar-chart')
 ])
 
 @app.callback(
@@ -196,6 +197,26 @@ def update_cpi_histogram(selected_year):
 
     return fig
 
+
+# Callback to update the bar chart based on the selected region
+@app.callback(
+    dash.dependencies.Output('cpi-bar-chart', 'figure'),
+    [dash.dependencies.Input('region-selector', 'value')]
+)
+def update_cpi_chart(selected_region):
+    sheet_data = data[selected_region].iloc[1:]
+    sheet_data['Date'] = pd.to_datetime(sheet_data['Date'])
+    sheet_data['Year'] = sheet_data['Date'].dt.year
+    sheet_data['MonthName'] = sheet_data['Date'].dt.strftime('%b')
+    sheet_data['CPI'] = sheet_data.iloc[:, 1]
+    sheet_data.sort_values(by='Date', inplace=True)
+    pivot_data = sheet_data.pivot_table(index='Year', columns='MonthName', values='CPI', aggfunc='mean')
+    pivot_data.reset_index(inplace=True)
+    month_order = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    pivot_data = pivot_data.reindex(columns=['Year'] + month_order)
+    fig = px.bar(pivot_data, x='Year', y=month_order, barmode='group')
+    fig.update_layout(title=f'Monthly CPI Values by Year - {selected_region}', xaxis={'title': 'Year'}, yaxis_title='CPI')
+    return fig
 
 # Run the Dash app
 if __name__ == '__main__':
