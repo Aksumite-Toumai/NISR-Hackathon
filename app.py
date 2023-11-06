@@ -1,8 +1,8 @@
 import dash  # type: ignore
 import os  # type: ignore
-from dash import Dash, html, dcc, Input, Output, State
+from dash import Dash, html, dcc, Input, Output, State  # type: ignore
 import dash_bootstrap_components as dbc  # type: ignore
-from flask import Flask
+from flask import Flask  # type: ignore
 import logging
 import db
 import auth
