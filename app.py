@@ -44,7 +44,7 @@ DASH_APP = Dash(__name__,
 DASH_APP.layout = html.Div([
     dcc.Location(id='url', refresh=True),
     dash.page_container
-], style={'background-color': '#DCDCDC'})
+], style={'background-color': '#DCDCDC'}, id="url-home-lang")
 
 
 # Function to render the main page based on the url
