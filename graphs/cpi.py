@@ -4,11 +4,12 @@ import os
 import dash_bootstrap_components as dbc  # type: ignore
 from config import CONFIG
 import logging
+import plotly.express as px  # type: ignore
 
 
 # Path to datasets main folder
 DATASETS_PATH = ""
-CPI_PATH = "CPI.xlsm"
+CPI_PATH = "CPI_time_series_September_2023.xlsm"
 
 # read the CPI excel file
 CPI_EXCEL_FILE = None
@@ -104,7 +105,7 @@ def generate_other_indices_plots():
     ], color="#284fa1", outline=False))
 
     # Plot 3: CPI Yearly for Urban
-    graph3 = dcc.Graph(id='combined-cpi-yearly-plot')
+    graph3 = dcc.Graph(id='combined-cpi-yearly-plot', config=CONFIG)
 
     graphs.append(dbc.Card([
         dbc.CardHeader([
@@ -138,7 +139,7 @@ def generate_other_indices_plots():
     ], color="#284fa1", outline=False))
 
     # Plot 4: CPI Yearly for Rural
-    graph4 = dcc.Graph(id='combined-cpi-monthly-change-plot')
+    graph4 = dcc.Graph(id='combined-cpi-monthly-change-plot', config=CONFIG)
 
     graphs.append(dbc.Card([
         dbc.CardHeader([
@@ -171,6 +172,70 @@ def generate_other_indices_plots():
         ),
     ], color="#284fa1", outline=False))
 
+    graph5 = dcc.Graph(id='combined-cpi-monthly-change-histogram', config=CONFIG)
+    graphs.append(dbc.Card([
+        dbc.CardHeader([
+            dbc.Row(
+                [
+                    dbc.Col(html.Span("CPI Values", id='cpi-year-title-3')),
+                    dbc.Col([
+                        # year selection
+                        dcc.Dropdown(
+                            id='cpi-year-dropdown-3',
+                            options=[
+                                {
+                                    "label": html.Span(year, style={'color': 'black'}),
+                                    "value": year,
+                                } for year in years
+                            ],
+                            value=years[-1],  # Default value is the latest year
+                            clearable=False
+                        ),
+                    ])
+                ]
+            )
+        ], style={"color": "white", 'font-size': 20},),
+        dbc.CardBody(
+            [
+                html.Div([
+                    graph5
+                ])
+            ], style={"padding": "0"},
+        ),
+    ], color="#284fa1", outline=False))
+
+    graph6 = dcc.Graph(id='cpi-bar-chart', config=CONFIG)
+    regions = ['Urban', 'Rural', 'All Rwanda']
+    graphs.append(dbc.Card([
+        dbc.CardHeader([
+            dbc.Row(
+                [
+                    dbc.Col(html.Span("Monthly CPI Values by Year", id='cpi-year-title-6')),
+                    dbc.Col([
+                        # year selection
+                        dcc.Dropdown(
+                            id='cpi-region-selector-dropdown',
+                            options=[
+                                {
+                                    "label": html.Span(region, style={'color': 'black'}),
+                                    "value": region,
+                                } for region in regions
+                            ],
+                            value=regions[0],  # Default value is the latest year
+                            clearable=False
+                        ),
+                    ])
+                ]
+            )
+        ], style={"color": "white", 'font-size': 20},),
+        dbc.CardBody(
+            [
+                html.Div([
+                    graph6
+                ])
+            ], style={"padding": "0"},
+        ),
+    ], color="#284fa1", outline=False))
     return graphs
 
 
@@ -193,7 +258,8 @@ def get_content():
         ),
         dbc.Row(
             [
-                dbc.Col(width=6),
+                dbc.Col(graphs[4], width=5),
+                dbc.Col(graphs[5], width=7),
             ],
             className="mb-3 py-0 px-0",
         ),
@@ -305,3 +371,50 @@ def update_monthly_change_graph(selected_year):
     }
     title = f'CPI Monthly Change for {selected_year}'
     return graph, title
+
+
+@callback(
+    Output('combined-cpi-monthly-change-histogram', 'figure'),
+    [Input('cpi-year-dropdown-3', 'value')]
+)
+def update_cpi_histogram(selected_year):
+    data = CPI_EXCEL_FILE
+    mask_urban = pd.to_datetime(data["Urban"]["Date"][1:]).dt.year == selected_year
+    mask_rural = pd.to_datetime(data["Rural"]["Date"][1:]).dt.year == selected_year
+    mask_all_rwanda = pd.to_datetime(data["All Rwanda"]["Date"][1:]).dt.year == selected_year
+
+    cpi_urban = data["Urban"]["GENERAL INDEX (CPI)"][1:][mask_urban]
+    cpi_rural = data["Rural"]["GENERAL INDEX (CPI)"][1:][mask_rural]
+    cpi_all_rwanda = data["All Rwanda"]["GENERAL INDEX (CPI)"][1:][mask_all_rwanda]
+
+    cpi_data = pd.DataFrame({'Urban': cpi_urban, 'Rural': cpi_rural, 'All Rwanda': cpi_all_rwanda}).reset_index(drop=True)
+
+    long_format_data = cpi_data.melt(var_name='Region', value_name='CPI')
+
+    fig = px.histogram(long_format_data, x='CPI', color='Region', barmode='overlay')
+
+    fig.update_layout(title='', xaxis_title='CPI', yaxis_title='Count')
+
+    return fig
+
+
+# Callback to update the bar chart based on the selected region
+@callback(
+    Output('cpi-bar-chart', 'figure'),
+    [Input('cpi-region-selector-dropdown', 'value')]
+)
+def update_cpi_chart(selected_region):
+    data = CPI_EXCEL_FILE
+    sheet_data = data[selected_region].iloc[1:]
+    sheet_data['Date'] = pd.to_datetime(sheet_data['Date'])
+    sheet_data['Year'] = sheet_data['Date'].dt.year
+    sheet_data['MonthName'] = sheet_data['Date'].dt.strftime('%b')
+    sheet_data['CPI'] = sheet_data.iloc[:, 1]
+    sheet_data.sort_values(by='Date', inplace=True)
+    pivot_data = sheet_data.pivot_table(index='Year', columns='MonthName', values='CPI', aggfunc='mean')
+    pivot_data.reset_index(inplace=True)
+    month_order = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    pivot_data = pivot_data.reindex(columns=['Year'] + month_order)
+    fig = px.bar(pivot_data, x='Year', y=month_order, barmode='group')
+    fig.update_layout(title='', xaxis={'title': 'Year'}, yaxis_title='CPI')
+    return fig
