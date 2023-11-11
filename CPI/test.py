@@ -1,9 +1,8 @@
-import dash
-from dash import dcc
-from dash import html
-import plotly.graph_objects as go
-import pandas as pd
-import plotly.express as px
+import dash  # type: ignore
+from dash import dcc  # type: ignore
+from dash import html  # type: ignore
+import pandas as pd  # type: ignore
+import plotly.express as px  # type: ignore
 
 
 data = pd.read_excel("CPI.xlsm", sheet_name=None)
@@ -18,7 +17,6 @@ app = dash.Dash(__name__)
 
 
 app.layout = html.Div([
-
     # Plot 1: Urban vs. Rural vs. All Rwanda CPI
     dcc.Graph(
         id='plot1',
@@ -58,21 +56,22 @@ app.layout = html.Div([
         value=years[-1],  # Default value is the latest year
         clearable=False
     ),
-    dcc.Graph(id='combined-cpi-yearly-plot' # CPI monthly for selected year
-    ),
-    dcc.Graph(id='combined-cpi-monthly-change-plot' # CPI monthly change for selected year
-    ),
-    dcc.Graph(id='combined-cpi-monthly-change-histogram' # histogram of CPI values for selected year
-    ),
+    dcc.Graph(id='combined-cpi-yearly-plot'),  # CPI monthly for selected year),
+    dcc.Graph(id='combined-cpi-monthly-change-plot'),  # CPI monthly change for selected year,
+    dcc.Graph(id='combined-cpi-monthly-change-histogram'),  # histogram of CPI values for selected year
     # CPI annual change
-        dcc.Graph(
+    dcc.Graph(
         id='cpi-annual-change',
         figure={
             'data': [
-            {'x': data['Urban']['Date'][1:], 'y':data["Urban"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100, 'type': 'line', 'name': 'Urban'},
-            {'x': data['Rural']['Date'][1:], 'y': data["Rural"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100, 'type': 'line', 'name': 'Rural'},
-            {'x': data['All Rwanda']['Date'][1:], 'y': data["All Rwanda"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100, 'type': 'line', 'name': 'All Rwanda'}
-            ],
+                {'x': data['Urban']['Date'][1:], 'y': data["Urban"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100,
+                 'type': 'line', 'name': 'Urban'},
+                {'x': data['Rural']['Date'][1:], 'y': data["Rural"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100,
+                 'type': 'line', 'name': 'Rural'},
+                {'x': data['All Rwanda']['Date'][1:],
+                 'y': data["All Rwanda"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12)*100,
+                 'type': 'line', 'name': 'All Rwanda'}
+                ],
             'layout': {
                 'title': 'CPI Annual Change',
                 'xaxis': {
@@ -89,6 +88,7 @@ app.layout = html.Div([
 
 ])
 
+
 @app.callback(
     dash.dependencies.Output('combined-cpi-yearly-plot', 'figure'),
     [dash.dependencies.Input('year-dropdown', 'value')]
@@ -97,7 +97,7 @@ def update_graph(selected_year):
     mask_urban = pd.to_datetime(data["Urban"]["Date"][1:]).dt.year == selected_year
     mask_rural = pd.to_datetime(data["Rural"]["Date"][1:]).dt.year == selected_year
     mask_all_rwanda = pd.to_datetime(data["All Rwanda"]["Date"][1:]).dt.year == selected_year
-    
+
     return {
         'data': [
             {
@@ -122,10 +122,12 @@ def update_graph(selected_year):
         'layout': {
             'title': f'CPI Monthly for {selected_year}',
             'xaxis': {
-                'ticktext': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                'ticktext': ['January', 'February', 'March', 'April', 'May', 'June',
+                             'July', 'August', 'September', 'October', 'November', 'December']
             }
         }
     }
+
 
 @app.callback(
     dash.dependencies.Output('combined-cpi-monthly-change-plot', 'figure'),
@@ -135,11 +137,11 @@ def update_monthly_change_graph(selected_year):
     mask_urban = pd.to_datetime(data["Urban"]["Date"][1:]).dt.year == selected_year
     mask_rural = pd.to_datetime(data["Rural"]["Date"][1:]).dt.year == selected_year
     mask_all_rwanda = pd.to_datetime(data["All Rwanda"]["Date"][1:]).dt.year == selected_year
-    
+
     monthly_change_urban = data["Urban"]["GENERAL INDEX (CPI)"][1:].pct_change() * 100
     monthly_change_rural = data["Rural"]["GENERAL INDEX (CPI)"][1:].pct_change() * 100
     monthly_change_all_rwanda = data["All Rwanda"]["GENERAL INDEX (CPI)"][1:].pct_change() * 100
-    
+
     return {
         'data': [
             {
@@ -164,7 +166,8 @@ def update_monthly_change_graph(selected_year):
         'layout': {
             'title': f'CPI Monthly Change for {selected_year}',
             'xaxis': {
-                'ticktext': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                'ticktext': ['January', 'February', 'March', 'April', 'May',
+                             'June', 'July', 'August', 'September', 'October', 'November', 'December']
             },
             'yaxis': {
                 'title': 'Monthly Change (%)'
@@ -172,11 +175,11 @@ def update_monthly_change_graph(selected_year):
         }
     }
 
+
 @app.callback(
     dash.dependencies.Output('combined-cpi-monthly-change-histogram', 'figure'),
     [dash.dependencies.Input('year-dropdown', 'value')]
 )
-
 def update_cpi_histogram(selected_year):
     mask_urban = pd.to_datetime(data["Urban"]["Date"][1:]).dt.year == selected_year
     mask_rural = pd.to_datetime(data["Rural"]["Date"][1:]).dt.year == selected_year
