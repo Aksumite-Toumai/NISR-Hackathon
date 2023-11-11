@@ -1,5 +1,5 @@
 import dash  # type: ignore
-from dash import html
+from dash import html  # type: ignore
 
 
 dash.register_page(__name__)

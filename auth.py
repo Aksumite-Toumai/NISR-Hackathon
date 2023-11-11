@@ -1,4 +1,4 @@
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash  # type: ignore
 from db import get_db
 import db
 

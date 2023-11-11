@@ -4,10 +4,10 @@ import os
 import pandas as pd  # type: ignore
 import logging
 from config import CONFIG
-from dash import callback, Output, Input
+from dash import callback, Output, Input  # type: ignore
 import plotly.express as px  # type: ignore
 import plotly.graph_objects as go  # type: ignore
-import numpy as np
+import numpy as np  # type: ignore
 
 
 # Path to GDP excel file
@@ -410,12 +410,83 @@ def get_content():
         ],
         style={"maxWidth": "540px", "padding": "0"},
     )
+
+    dgp_2017_card = dbc.Card(
+        [
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.CardImg(
+                            src="/assets/GDP.jpg",
+                            className="img-fluid mt-0 mb-0",
+                            style={"height": "153px", "padding": "0", "margin": "0"},
+                        ),
+                        className="col-md-5",
+                    ),
+                    dbc.Col(
+                        dbc.CardBody(
+                            [
+                                html.H6("Constant 2017 prices, Billions RFW", className="card-title"),
+                                html.Small(
+                                    GDP_EXCEL_FILE['Years'].values[-1],
+                                    className="card-text text-muted",
+                                ),
+                                html.P(GDP_EXCEL_FILE['GDP at constant 2017 prices'].values[-1],
+                                       className="card-text",
+                                       style={"font": "bold", "font-size": 45, 'color': "#97d26f", "text-align": "right"}),
+                            ]
+                        ),
+                        className="col-md-7",
+                    ),
+                ],
+                className="g-0 d-flex align-items-center",
+                style={"padding": "0", "margin": "0"},
+            )
+        ],
+        style={"maxWidth": "540px", "padding": "0"},
+    )
+
+    dgp_current_card = dbc.Card(
+        [
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.CardImg(
+                            src="/assets/gdp.jpg",
+                            className="img-fluid mt-0 mb-0",
+                            style={"height": "153px", "padding": "0", "margin": "0"},
+                        ),
+                        className="col-md-5",
+                    ),
+                    dbc.Col(
+                        dbc.CardBody(
+                            [
+                                html.H6("Current prices, Billions RFW", className="card-title"),
+                                html.Small(
+                                    GDP_EXCEL_FILE['Years'].values[-1],
+                                    className="card-text text-muted",
+                                ),
+                                html.P(GDP_EXCEL_FILE['GDP at current prices'].values[-1],
+                                       className="card-text",
+                                       style={"font": "bold", "font-size": 45, 'color': "#419b3c", "text-align": "right"}),
+                            ]
+                        ),
+                        className="col-md-7",
+                    ),
+                ],
+                className="g-0 d-flex align-items-center",
+                style={"padding": "0", "margin": "0"},
+            )
+        ],
+        style={"maxWidth": "540px", "padding": "0"},
+    )
     return [html.Div([
         dbc.Row(
             [
-                dbc.Col(popuplation_card),
+                dbc.Col(popuplation_card, width=4),
                 dbc.Col(exchange_card),
-                dbc.Col(),
+                dbc.Col(dgp_2017_card),
+                dbc.Col(dgp_current_card),
             ],
             className="mb-3 mt-2 py-0 px-0",
         ),

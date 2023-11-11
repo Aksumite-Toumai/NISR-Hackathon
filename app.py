@@ -1,8 +1,8 @@
 import dash  # type: ignore
 import os  # type: ignore
-from dash import Dash, html, dcc, Input, Output, State
+from dash import Dash, html, dcc, Input, Output, State  # type: ignore
 import dash_bootstrap_components as dbc  # type: ignore
-from flask import Flask
+from flask import Flask  # type: ignore
 import logging
 import db
 import auth
@@ -29,16 +29,10 @@ FLASK_APP.config.from_mapping(
 # Initialize the flask server with the database
 db.init_app(FLASK_APP)
 
-css2 = "assets/vendor/fontawesome-free/css/all.min.css"
-# script1 = "assets/vendor/jquery/jquery.min.js"
-# script2 = "assets/vendor/bootstrap/js/bootstrap.bundle.min.js"
-# script3 = "assets/vendor/jquery-easing/jquery.easing.min.js"
-# script5 = "assets/vendor/chart.js/Chart.min.js"
-
 # Initialize Dash app within the Flask app
-external_stylesheets = ['/assets/css/bootstrap.min.css', '/assets/style.css', css2]
 external_scripts = ['/assets/js/bootstrap.min.js']
 
+# Create the dash app
 DASH_APP = Dash(__name__,
                 server=FLASK_APP,
                 use_pages=True,
@@ -51,7 +45,7 @@ DASH_APP = Dash(__name__,
 DASH_APP.layout = html.Div([
     dcc.Location(id='url', refresh=True),
     dash.page_container
-], style={'background-color': '#DCDCDC'})
+], style={'background-color': '#DCDCDC'}, id="url-home-lang")
 
 
 # Function to render the main page based on the url
@@ -126,4 +120,4 @@ def login_user(n_clicks, username, pwd):
 
 # Run the app
 if __name__ == '__main__':
-    DASH_APP.run_server(port=8889, debug=True)
+    DASH_APP.run_server(host='0.0.0.0', port=8889, debug=False)
