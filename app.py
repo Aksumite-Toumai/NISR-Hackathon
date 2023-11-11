@@ -32,6 +32,7 @@ db.init_app(FLASK_APP)
 # Initialize Dash app within the Flask app
 external_scripts = ['/assets/js/bootstrap.min.js']
 
+# Create the dash app
 DASH_APP = Dash(__name__,
                 server=FLASK_APP,
                 use_pages=True,
@@ -119,4 +120,4 @@ def login_user(n_clicks, username, pwd):
 
 # Run the app
 if __name__ == '__main__':
-    DASH_APP.run_server(host='0.0.0.0', port=8889, debug=True)
+    DASH_APP.run_server(host='0.0.0.0', port=8889, debug=False)
