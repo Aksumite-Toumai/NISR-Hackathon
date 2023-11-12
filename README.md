@@ -62,7 +62,7 @@ We believe that by simplifying the representation of complex statistical data th
 - [Luel Hagos Beyene](https://github.com/luelhagos)
 
 ### Overview Video
-- ![Video Overview]([URL-of-GIF](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/NISR%20Dashboard.gif))
+- ![Video Overview](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/NISR%20Dashboard.gif)
   
 ### Acknowledgements
 - [National Institute of Statistics Rwanda (NISR)](https://www.statistics.gov.rw/)
