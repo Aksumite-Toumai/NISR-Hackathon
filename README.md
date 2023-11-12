@@ -50,14 +50,19 @@ We believe that by simplifying the representation of complex statistical data th
 - A list of technologies, libraries, and frameworks used in the project.
   - [Python](https://www.python.org/)
   - [Dash](https://dash.plotly.com/)
-  - 
+  - [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+  - [Plotly](https://plotly.com/graphing-libraries/)
+  - [Pandas](https://pandas.pydata.org/)
+  - [SQLAlchemy](https://www.sqlalchemy.org/)
+  - [Bootstrap](https://getbootstrap.com/)
+  - [Google Translate API](https://pypi.org/project/googletrans/)
 
 ### Team Members
 - [Mahamat Azibert Abdelwahab](https://github.com/abdelwahab01630)
 - [Luel Hagos Beyene](https://github.com/luelhagos)
 
 ### Overview Video
-- [![Video Overview]([image-url](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/demo_image.png))](https://drive.google.com/file/d/1IU-_ktljs9ixCtdhKUrLKBA7Nhl6eucj/preview)
+- ![Video Overview]([URL-of-GIF](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/NISR%20Dashboard.gif))
   
 ### Acknowledgements
 - [National Institute of Statistics Rwanda (NISR)](https://www.statistics.gov.rw/)
