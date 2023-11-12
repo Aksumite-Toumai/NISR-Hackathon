@@ -22,10 +22,24 @@ We believe that by simplifying the representation of complex statistical data th
 
 
 ### Installation
-- To be updated...
+1. **Clone the Repository**:
+   ```bash
+   git clone <repository_url>
+   cd <repository_name>
+
+2. **Set Up a Virtual Environment** (optional but recommended):
+      ```bash
+      python -m venv venv
+      source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+
+3. **Install Dependencies**:
+    ```bash
+    pip install -r requirements.txt
 
 ### Usage
-- To be updated...
+- **Run the dashboard**:
+  ```bash
+    python app.py
 
 ### Data Source
 - [Gross Domestic Product 2022 (GDP)](https://www.statistics.gov.rw/publication/1914) and [Consumer Price Index 2022 (CPI)](https://www.statistics.gov.rw/publication/1873)
