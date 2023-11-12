@@ -10,8 +10,9 @@
 3. [Usage](#usage)
 4. [Data Source](#data-source)
 5. [Technologies Used](#technologies-used)
-6. [Team Members](#team-members)
-7. [Acknowledgements](#acknowledgements)
+6. [Dasboard Overview](#dashboard-overview)
+7. [Team Members](#team-members)
+8. [Acknowledgements](#acknowledgements)
 
 ### Project Description
 Our project is part of the [National Institute of Statistics Rwanda (NISR) Hackathon 2023 Edition](https://www.statistics.gov.rw/about-us/hackathon-competition-2023-edition), which invites university students to visualize statistical messages published by [NISR](https://www.statistics.gov.rw/) through infographics and interactive dashboards. The overarching goal of this competition is to foster statistical literacy and promote data-driven decision-making.
@@ -55,7 +56,7 @@ We believe that by simplifying the representation of complex statistical data th
   - [Bootstrap](https://getbootstrap.com/)
   - [Google Translate API](https://pypi.org/project/googletrans/)
 
-### Video Overview
+### Dashboard Overview
 - ![Dashboard Overview](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/NISR%20Dashboard.gif)
 
 ### Team Members
