@@ -22,6 +22,12 @@ We believe that by simplifying the representation of complex statistical data th
 
 
 ### Installation
+Please ensure you have the following prerequisites:
+
+- **Python 3.10+**: This project requires Python version 3.10 or higher. If you don't have Python 3.10 or higher installed, you can download it from [the official Python website](https://www.python.org/downloads/).
+
+Once you have Python 3.10 or higher, you can proceed with the following installation steps:
+
 1. **Clone the Repository**:
    ```bash
    git clone <repository_url>
