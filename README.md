@@ -42,6 +42,9 @@ We believe that by simplifying the representation of complex statistical data th
 - [Mahamat Azibert Abdelwahab](https://github.com/abdelwahab01630)
 - [Luel Hagos Beyene](https://github.com/luelhagos)
 
+### Overview Video
+- [![Video Overview]([image-url](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/demo_image.png))](https://drive.google.com/file/d/1IU-_ktljs9ixCtdhKUrLKBA7Nhl6eucj/preview)
+  
 ### Acknowledgements
 - [National Institute of Statistics Rwanda (NISR)](https://www.statistics.gov.rw/)
 - [African Institute for Mathematical Sciences (AIMS)](https://nexteinstein.org/)
