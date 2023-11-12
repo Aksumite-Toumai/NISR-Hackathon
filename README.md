@@ -43,8 +43,6 @@ We believe that by simplifying the representation of complex statistical data th
 
 ### Data Source
 - [Gross Domestic Product 2022 (GDP)](https://www.statistics.gov.rw/publication/1914) and [Consumer Price Index 2022 (CPI)](https://www.statistics.gov.rw/publication/1873)
-- [Labor Force Survey 2022](https://www.statistics.gov.rw/publication/1919)
-- [Seasonal Agriculture Surveys 2022](https://www.statistics.gov.rw/publication/seasonal-agricultural-survey-2022-annual-report)
 
 ### Technologies Used
 - A list of technologies, libraries, and frameworks used in the project.
@@ -57,12 +55,12 @@ We believe that by simplifying the representation of complex statistical data th
   - [Bootstrap](https://getbootstrap.com/)
   - [Google Translate API](https://pypi.org/project/googletrans/)
 
+### Video Overview
+- ![Dashboard Overview](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/NISR%20Dashboard.gif)
+
 ### Team Members
 - [Mahamat Azibert Abdelwahab](https://github.com/abdelwahab01630)
 - [Luel Hagos Beyene](https://github.com/luelhagos)
-
-### Overview Video
-- ![Video Overview](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/NISR%20Dashboard.gif)
   
 ### Acknowledgements
 - [National Institute of Statistics Rwanda (NISR)](https://www.statistics.gov.rw/)
