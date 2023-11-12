@@ -57,7 +57,7 @@ We believe that by simplifying the representation of complex statistical data th
   - [Google Translate API](https://pypi.org/project/googletrans/)
 
 ### Dashboard Overview
-- ![Dashboard Overview](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/NISR%20Dashboard.gif)
+- ![Dashboard Overview]([https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/luel_branch/NISR%20Dashboard.gif](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/main/NISR%20Dashboard.gif))
 
 ### Team Members
 - [Mahamat Azibert Abdelwahab](https://github.com/abdelwahab01630)
