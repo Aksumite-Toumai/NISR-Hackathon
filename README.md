@@ -1,6 +1,6 @@
 # Hackathon Project: Statistical Dashboard
 ## [National Institute of Statistics Rwanda Hackathon 2023 Edition](https://www.statistics.gov.rw/about-us/hackathon-competition-2023-edition)
-
+![Dashboard Overview](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/main/NISR%20Dashboard.gif)
 ### Team Name: [Aksumite-Toumai](https://github.com/Aksumite-Toumai)
 ### Institution: [African Institute for Mathematical Sciences (AIMS)](https://nexteinstein.org/)
 
@@ -10,7 +10,6 @@
 3. [Usage](#usage)
 4. [Data Source](#data-source)
 5. [Technologies Used](#technologies-used)
-6. [Dasboard Overview](#dashboard-overview)
 7. [Team Members](#team-members)
 8. [Acknowledgements](#acknowledgements)
 
@@ -55,9 +54,6 @@ We believe that by simplifying the representation of complex statistical data th
   - [SQLAlchemy](https://www.sqlalchemy.org/)
   - [Bootstrap](https://getbootstrap.com/)
   - [Google Translate API](https://pypi.org/project/googletrans/)
-
-### Dashboard Overview
-- ![Dashboard Overview](https://github.com/Aksumite-Toumai/NISR-Hackathon/blob/main/NISR%20Dashboard.gif)
 
 ### Team Members
 - [Mahamat Azibert Abdelwahab](https://github.com/abdelwahab01630)
