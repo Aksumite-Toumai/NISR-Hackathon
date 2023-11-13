@@ -59,7 +59,6 @@ Once you have Python 3.10 or higher, you can proceed with the following installa
   - [Pandas](https://pandas.pydata.org/)
   - [SQLAlchemy](https://www.sqlalchemy.org/)
   - [Bootstrap](https://getbootstrap.com/)
-  - [Google Translate API](https://pypi.org/project/googletrans/)
 
 ### Team Members
 - [Mahamat Azibert Abdelwahab](https://github.com/abdelwahab01630)
