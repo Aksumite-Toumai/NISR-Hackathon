@@ -77,7 +77,7 @@ search_bar = dbc.Row(
             ),
             width=1,
         ),
-        dbc.Col(lang_dropdown_btn, width=4, className="d-flex justify-content-end",),
+        # dbc.Col(lang_dropdown_btn, width=4, className="d-flex justify-content-end",),
         dbc.Col(
             dcc.Link(children="Log out", href="/logout", className="btn btn-outline-danger btn-logout"),
             width=4,
@@ -120,27 +120,27 @@ def layout():
                 vertical=True,
                 pills=True,
             ),
-            html.Hr(),
-            html.P([
-                html.I(className="fa fa-microchip fa-lg"),
-                dbc.Label(config.translate_text("Machine Learning"), style={'padding-left': '0.5rem'})
-                ], style={'margin': '0rem', 'margin-left': '1rem', "color": "#284fa1"}),
-            dbc.Nav(
-                [
-                    dbc.NavLink(config.translate_text("Supervised"),
-                                href="#",
-                                style={'color': "#696969"},
-                                className="nav-link nav-home-link",
-                                id="MLS"),
-                    dbc.NavLink(config.translate_text("Unsupervised"),
-                                href="#",
-                                style={'color': "#696969"},
-                                className="nav-link nav-home-link",
-                                id="MLU"),
-                ],
-                vertical=True,
-                pills=True,
-            ),
+            # html.Hr(),
+            # html.P([
+            #     html.I(className="fa fa-microchip fa-lg"),
+            #     dbc.Label(config.translate_text("Machine Learning"), style={'padding-left': '0.5rem'})
+            #     ], style={'margin': '0rem', 'margin-left': '1rem', "color": "#284fa1"}),
+            # dbc.Nav(
+            #     [
+            #         dbc.NavLink(config.translate_text("Supervised"),
+            #                     href="#",
+            #                     style={'color': "#696969"},
+            #                     className="nav-link nav-home-link",
+            #                     id="MLS"),
+            #         dbc.NavLink(config.translate_text("Unsupervised"),
+            #                     href="#",
+            #                     style={'color': "#696969"},
+            #                     className="nav-link nav-home-link",
+            #                     id="MLU"),
+            #     ],
+            #     vertical=True,
+            #     pills=True,
+            # ),
             html.Hr(),
             html.P([
                 html.I(className="fa fa-table fa-lg"),
