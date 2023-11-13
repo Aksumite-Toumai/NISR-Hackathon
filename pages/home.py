@@ -78,11 +78,11 @@ search_bar = dbc.Row(
             width=1,
         ),
         # dbc.Col(lang_dropdown_btn, width=4, className="d-flex justify-content-end",),
-        dbc.Col(
-            dcc.Link(children="Log out", href="/logout", className="btn btn-outline-danger btn-logout"),
-            width=4,
-            className="d-flex justify-content-end",
-        ),
+        # dbc.Col(
+        #     dcc.Link(children="Log out", href="/logout", className="btn btn-outline-danger btn-logout"),
+        #     width=8,
+        #     className="d-flex justify-content-end justify-content-right",
+        # ),
     ],
 )
 
