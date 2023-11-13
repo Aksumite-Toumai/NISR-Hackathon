@@ -14,4 +14,3 @@ xlrd
 dash-pivottable
 openpyxl
 dash-slicer
-googletrans
