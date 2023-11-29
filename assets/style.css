@@ -27,11 +27,16 @@ border-bottom-right-radius: .3rem;
     color: #284fa1 !important;
     background-color: #C0C0C0 !important;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2); /* Adjust shadow properties */
-    font-size: 18px;
 }
 
-/* code to change background color
+/* code to change background color */
 .nav-home-link:active {
     background-color: #C0C0C0 !important;
     color: green !important;
-} */
+}
+
+.figTitle{
+    color: white;
+    font-size: 20;
+    background-color: #284fa1 !important;
+}
