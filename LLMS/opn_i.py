@@ -14,7 +14,7 @@ def chat_csv(df, question):
             {context}
     """
 
-    prompt = f"{context}\n\nQuestion: {question}"
+    prompt = f"Question: {question}"
     response = client.chat.completions.create(
     model="gpt-4-1106-preview",
     messages=[
