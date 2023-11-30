@@ -949,7 +949,7 @@ def gdp_figure_chat(btn, input_text, start_date, end_date, gdp_value, chart, gdp
     start_date = start_date_object.year
     end_date = end_date_object.year
     data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)]
-    if gdp_value != "All":
+    if gdp != "All":
         data = data[["Years", gdp]]
     else:
         data = data[["Years", "GDP at current prices", "GDP at constant 2017 prices"]]
