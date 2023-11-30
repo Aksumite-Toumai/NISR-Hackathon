@@ -141,12 +141,110 @@ dgp_current_card = dbc.Card(
 )
 
 
+# GDP Card
+gdp_card = dbc.Card(
+    [
+        dbc.CardHeader("Gross Domestic Product (GDP)", style={"color": "#284fa1"}),
+        dbc.CardBody(
+            [
+                html.P(
+                    "GDP represents the total value of all goods and services produced "
+                    "within a country's borders over a specific time period.",
+                    className="card-text",
+                ),
+                html.P(
+                    "It is a key indicator of a country's economic health and is often "
+                    "used to assess and compare the economic performance of different nations.",
+                    className="card-text",
+                ),
+            ]
+        ),
+    ],
+    color="#284fa1",
+    inverse=True,
+)
+
+# CPI Card
+cpi_card = dbc.Card(
+    [
+        dbc.CardHeader("Consumer Price Index (CPI)", style={"color": "#284fa1"}),
+        dbc.CardBody(
+            [
+                html.P(
+                    "CPI is a measure that examines the average change in prices paid by "
+                    "consumers for a basket of goods and services over time.",
+                    className="card-text",
+                ),
+                html.P(
+                    "It is widely used to assess inflation and to adjust income and spending "
+                    "for changes in the cost of living.",
+                    className="card-text",
+                ),
+            ]
+        ),
+    ],
+    color="success",
+    inverse=True,
+)
+
+
+# CPI Card
+welome_card = dbc.Card(
+    [
+        dbc.CardBody(
+            [
+                dbc.Row(
+                    [
+                        dbc.Container(
+                            [
+                                html.H1("Welcome to the NISR Hackathon Dashboard", className="display-4"),
+                                html.P("This dashboard showcases statistical data visualizations generated using Python. "
+                                    "Explore the various features to gain insights into the provided datasets.", className="lead"),
+
+                                html.H2("Key Features", className="mt-4"),
+                                html.Ul([
+                                    html.Li(["Interactive visualizations of NISR datasets:",
+                                            html.Ul([
+                                                html.Li("GDP National Accounts"),
+                                                html.Li("Consumer Price Index"),
+                                                # Add more features as needed
+                                            ], className="list-styled"),]),
+                                    html.Li("Data exploration tools and filters."),
+                                    html.Li("Insights and trends analysis."),
+                                    # Add more features as needed
+                                ], className="list-styled"),
+
+                                html.P("To get started, use the sidebar navigation to explore different sections of the dashboard.",
+                                    className="mt-3 font-italic"),
+                            ],
+                            fluid=True  # Use a fluid layout for a full-width container
+                        )
+                    ],
+                    className="mb-3 py-0 px-0 mt-4",
+                ),
+            ]
+        ),
+    ],
+    color="info",
+    inverse=True,
+    className="mb-3",
+)
+
+
 def layout():
     return html.Div([
         html.Div(
             html.H1("Dashboard > Overview", className="h3 mb-0 text-gray-800"),
             className="d-sm-flex align-items-center justify-content-between mb-4",
         ),
+        welome_card,
+        dbc.Row(
+            [
+                dbc.Col(gdp_card, width=6),
+                dbc.Col(cpi_card, width=6),
+            ]
+        ),
+        html.Hr(),
         dbc.Row(
             [
 
@@ -156,36 +254,6 @@ def layout():
                 dbc.Col(dgp_current_card, width=3),
             ],
             className="mb-3 mt-2 py-0 px-0",
-        ),
-        html.Hr(),
-        dbc.Row(
-            [
-                dbc.Container(
-                    [
-                        html.H1("Welcome to the NISR Hackathon Dashboard", className="display-4"),
-                        html.P("This dashboard showcases statistical data visualizations generated using Python. "
-                               "Explore the various features to gain insights into the provided datasets.", className="lead"),
-
-                        html.H2("Key Features", className="mt-4"),
-                        html.Ul([
-                            html.Li(["Interactive visualizations of NISR datasets:",
-                                    html.Ul([
-                                        html.Li("GDP National Accounts"),
-                                        html.Li("Consumer Price Index"),
-                                        # Add more features as needed
-                                    ], className="list-styled"),]),
-                            html.Li("Data exploration tools and filters."),
-                            html.Li("Insights and trends analysis."),
-                            # Add more features as needed
-                        ], className="list-styled"),
-
-                        html.P("To get started, use the sidebar navigation to explore different sections of the dashboard.",
-                               className="mt-3 font-italic text-muted"),
-                    ],
-                    fluid=True  # Use a fluid layout for a full-width container
-                )
-            ],
-            className="mb-3 py-0 px-0 mt-4",
         ),
     ])
 
