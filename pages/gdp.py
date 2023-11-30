@@ -6,7 +6,7 @@ import plotly.express as px  # type: ignore
 import plotly.graph_objects as go  # type: ignore
 from data import GDP_EXCEL_FILE
 from datetime import date
-from llm import chat_with_csv
+from llm import chat_with_csv, qa_csv
 
 
 dash.register_page(__name__)
@@ -957,7 +957,7 @@ def gdp_figure_chat(btn, input_text, start_date, end_date, gdp_value, chart, gdp
 
     if input_text is None:
         return dash.no_update, dash.no_update
-    return [chat_with_csv(data, chart)], ""
+    return [qa_csv(data, input_text)], ""
 
 
 @callback(
