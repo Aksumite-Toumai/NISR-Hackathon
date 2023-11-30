@@ -46,7 +46,7 @@ def get_proportions_of_gdp_by_sectors():
                 dbc.Col(html.Span([html.Sup("*", style={"color": "black"}), "Contribution of each sector on GDP"]),
                         id="proportions_of_gdp-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="proportions_of_gdp-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="proportions_of_gdp-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="proportions_of_gdp-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -242,7 +242,7 @@ exchange_rate_card = dbc.Card([
                 dbc.Col(html.Span([html.Sup("*", style={"color": "orange"}), "Exchange rate: Rwf per US dollar"]),
                         id="exhange-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="exchange-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="exchange-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="exchange-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -281,7 +281,7 @@ population_rate_card = dbc.Card([
                 dbc.Col(html.Span([html.Sup("*", style={"color": "green"}), "Population (in millions)"]),
                         id="exhange-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="population-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="population-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="population-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -321,7 +321,7 @@ gdp_per_capita_card = dbc.Card([
                 dbc.Col(html.Span([html.Sup("*", style={"color": "orange"}), "Population (in millions)"]),
                         id="gdp_per_capita-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="gdp_per_capita-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="gdp_per_capita-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="gdp_per_capita-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -361,7 +361,7 @@ national_income_expenditure_card = dbc.Card([
                 dbc.Col(html.Span([html.Sup("*", style={"color": "orange"}), "In RWF billion"]),
                         id="national_income_expenditure-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="national_income_expenditure-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="national_income_expenditure-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="national_income_expenditure-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -421,7 +421,7 @@ expenditure = dbc.Card([
                 dbc.Col(html.Span([html.Sup("*", style={"color": "orange"}), "In RWF billion"]),
                         id="expenditure-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="expenditure-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="expenditure-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="expenditure-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -948,7 +948,11 @@ def gdp_figure_chat(btn, input_text, start_date, end_date, gdp_value, chart, gdp
     end_date_object = date.fromisoformat(end_date)
     start_date = start_date_object.year
     end_date = end_date_object.year
-    data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)][["Years", gdp]]
+    data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)]
+    if gdp_value != "All":
+        data = data[["Years", gdp]]
+    else:
+        data = data[["Years", "GDP at current prices", "GDP at constant 2017 prices"]]
     # query = f"The figure chart type is {chart} and the GDP value is {gdp_value} \n. Answer the following prompt: {input_text}"
 
     if input_text is None:

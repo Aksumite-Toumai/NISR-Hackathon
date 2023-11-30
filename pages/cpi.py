@@ -76,16 +76,16 @@ graph2 = dcc.Graph(
     id='plot2',
     figure={
         'data': [
-            {'x': data["Urban"].columns[1:], 'y': data["Urban"].iloc[0, 1:], 'type': 'bar', 'name': 'Urban'},  # type: ignore
-            {'x': data["Rural"].columns[1:], 'y': data["Rural"].iloc[0, 1:], 'type': 'bar', 'name': 'Rural'},  # type: ignore
-            {'x': data["All Rwanda"].columns[1:], 'y': data["All Rwanda"].iloc[0, 1:], 'type': 'bar', 'name': 'All Rwanda'}  # type: ignore  # noqa
+            {'x': data["Urban"].columns[2:], 'y': data["Urban"].iloc[0, 2:], 'type': 'bar', 'name': 'Urban'},  # type: ignore
+            {'x': data["Rural"].columns[2:], 'y': data["Rural"].iloc[0, 2:], 'type': 'bar', 'name': 'Rural'},  # type: ignore
+            {'x': data["All Rwanda"].columns[2:], 'y': data["All Rwanda"].iloc[0, 2:], 'type': 'bar', 'name': 'All Rwanda'}  # type: ignore  # noqa
         ],
         'layout': {
             'title': '',
             'barmode': 'group',
             'paper_bgcolor': 'rgb(243, 243, 243)',
             'plot_bgcolor': 'rgb(243, 243, 243)',
-            'margin': {'l': 30, 'r': 9, 't': 30, 'b': 25},  # margin
+            'margin': {'l': 30, 'r': 9, 't': 30},  # margin
         }
     }, config=CONFIG
 )
@@ -220,6 +220,8 @@ graph4 = dcc.Graph(
                     'yaxis': {
                         'title': None
                     },
+                    'paper_bgcolor': 'rgb(243, 243, 243)',
+                    'plot_bgcolor': 'rgb(243, 243, 243)',
                     'margin': {'l': 30, 'r': 9, 't': 30, 'b': 35},  # margin
                 }
             }

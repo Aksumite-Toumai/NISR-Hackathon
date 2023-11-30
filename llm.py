@@ -24,18 +24,20 @@ def chat_with_csv(df, chart_type):
     """
 
     prompt = "Explain the chart"
-    response = client.chat.completions.create(
-        model="gpt-4-1106-preview",
-        messages=[
-            {"role": "system", "content": context},
-            {"role": "user", "content": prompt}
-        ]
-    )
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4-1106-preview",
+            messages=[
+                {"role": "system", "content": context},
+                {"role": "user", "content": prompt}
+            ]
+        )
 
-    response = response.choices[0].message
-    response = response.content
-    return response
-
+        response = response.choices[0].message
+        response = response.content
+        return response
+    except Exception:  # type: ignore
+        return "Something goes wrong.try it again later!"
 # df = pd.read_csv("NIMC.csv")
 # query = input("Enter your query: ")
 # result = chat_with_csv(df, query)
