@@ -46,6 +46,10 @@ Once you have Python 3.10 or higher, you can proceed with the following installa
 - **Run the dashboard**:
   ```bash
     python app.py
+  
+- **Open the dashboard**:
+  ```bash
+    http://localhost:8888/home
 
 ### Data Source
 - [Gross Domestic Product 2022 (GDP)](https://www.statistics.gov.rw/publication/1914) and [Consumer Price Index 2022 (CPI)](https://www.statistics.gov.rw/publication/1873)
