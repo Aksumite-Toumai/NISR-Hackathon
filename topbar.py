@@ -64,39 +64,31 @@ def topbar():
             lang_dropdown_btn,
         ],
         color="white",
-        className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow",
-        style={'margin': '0rem', 'margin-left': '1rem'}
+        className="navbar navbar-light bg-white topbar mb-4 fixed-top shadow",
+        style={'margin-left': '215px', 'margin-bottom': '50px'}
     )
     return navbar
 
 
 @callback(
     [
-        Output("sidebar-text-view", "children"),
         Output("sidebar-text-machine", "children"),
         Output("sidebar-text-GDP", "children"),
         Output("sidebar-text-CPI", "children"),
         Output("sidebar-text-Home", "children"),
         Output("sidebar-text-Components", "children"),
-        Output("sidebar-text-data", "children"),
         Output("sidebar-text-Dashboard", "children"),
         Output("sidebar-text-Overview", "children"),
-        Output("sidebar-text-pivot", "children"),
-        Output("sidebar-text-chat", "children"),
     ],
     [
         Input("lang_dropdown_btn", "value"),
-        Input("sidebar-text-view", "children"),
         Input("sidebar-text-machine", "children"),
         Input("sidebar-text-GDP", "children"),
         Input("sidebar-text-CPI", "children"),
         Input("sidebar-text-Home", "children"),
         Input("sidebar-text-Components", "children"),
-        Input("sidebar-text-data", "children"),
         Input("sidebar-text-Dashboard", "children"),
         Input("sidebar-text-Overview", "children"),
-        Input("sidebar-text-pivot", "children"),
-        Input("sidebar-text-chat", "children"),
     ],
 )
 def on_lang_change(selected_lang, *textes):

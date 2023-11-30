@@ -45,12 +45,13 @@ content = html.Div(
                     topbar(),
 
                     # Begin Page Content
-                    html.Div([dash.page_container], className="container-fluid")
+                    html.Div([dash.page_container], className="container-fluid", style={'margin-top': '80px'})
 
                 ], id="content")
             ],
             id="content-wrapper",
             className="d-flex flex-column",
+            style={'margin-left': '200px'}
         )
     ]
 )

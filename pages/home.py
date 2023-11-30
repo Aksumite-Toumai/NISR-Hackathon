@@ -157,6 +157,7 @@ def layout():
             ],
             className="mb-3 mt-2 py-0 px-0",
         ),
+        html.Hr(),
         dbc.Row(
             [
                 dbc.Container(

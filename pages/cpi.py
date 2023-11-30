@@ -50,7 +50,7 @@ graphs.append(dbc.Card([
             dbc.Row([
                 dbc.Col(id="graph1-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="graph1-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="graph1-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="graph1-explain-btn"
                         ), width=6, className="d-flex justify-content-end")

@@ -61,24 +61,24 @@ def sidebar():
             pills=True,
         ),
         html.Hr(),
-        html.P([
-            html.I(className="fa fa-table fa-lg"),
-            dbc.Label("Data", style={'padding-left': '0.5rem'}, id="sidebar-text-data")
-            ], style={"color": "#284fa1"}),
-        dbc.Nav(
-            [
-                dbc.NavLink(html.Span("View", id="sidebar-text-view"),
-                            href="/view",
-                            style={'color': "#696969"},
-                            className="nav-link nav-home-link",
-                            id="View-Data"),
-                dbc.NavLink(html.Span("Pivot Table", id="sidebar-text-pivot"),
-                            href="/pivottable",
-                            style={'color': "#696969"},
-                            className="nav-link nav-home-link",
-                            id="Pivot-Table"),
-            ],
-            vertical=True,
-            pills=True,
-        ),
-    ], className="navbar-nav sidebar sidebar-dark accordion w-100", id="accordionSidebar", style={'padding': '1rem'})
+        # html.P([
+        #     html.I(className="fa fa-table fa-lg"),
+        #     dbc.Label("Data", style={'padding-left': '0.5rem'}, id="sidebar-text-data")
+        #     ], style={"color": "#284fa1"}),
+        # dbc.Nav(
+        #     [
+        #         dbc.NavLink(html.Span("View", id="sidebar-text-view"),
+        #                     href="/view",
+        #                     style={'color': "#696969"},
+        #                     className="nav-link nav-home-link",
+        #                     id="View-Data"),
+        #         dbc.NavLink(html.Span("Pivot Table", id="sidebar-text-pivot"),
+        #                     href="/pivottable",
+        #                     style={'color': "#696969"},
+        #                     className="nav-link nav-home-link",
+        #                     id="Pivot-Table"),
+        #     ],
+        #     vertical=True,
+        #     pills=True,
+        # ),
+    ], className="navbar-nav sidebar sidebar-dark accordion w-100", id="accordionSidebar", style={'padding': '1rem', "position": "fixed"})  # noqa
