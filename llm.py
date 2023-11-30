@@ -38,7 +38,3 @@ def chat_with_csv(df, chart_type):
         return response
     except Exception:  # type: ignore
         return "Something goes wrong.try it again later!"
-# df = pd.read_csv("NIMC.csv")
-# query = input("Enter your query: ")
-# result = chat_with_csv(df, query)
-# print(result)
