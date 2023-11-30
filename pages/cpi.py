@@ -30,7 +30,7 @@ graphs.append(dbc.Card([
     dbc.CardHeader(
         dbc.Row([
             dbc.Col("Urban vs. Rural vs. All Rwanda CPI", ),
-            dbc.Col(dcc.RadioItems(
+            dbc.Col(dbc.RadioItems(
                 id='plot-selection',
                 options=[
                     {'label': html.Span('All CPI'), 'value': 'current'},
@@ -48,8 +48,7 @@ graphs.append(dbc.Card([
     ),
     dbc.CardFooter([
             dbc.Row([
-                dbc.Col(html.Span([html.Sup("*", style={"color": "orange"}), "Exchange rate: Rwf per US dollar"]),
-                        id="graph1-info-footer", width=6),
+                dbc.Col(id="graph1-info-footer", width=6),
                 dbc.Col(dbc.Button(
                         [dbc.Spinner(html.Span(id="graph1-ai-loading"), size="sm"), " Explain"],
                         color="primary",
@@ -101,10 +100,10 @@ graphs.append(dbc.Card([
     ),
     dbc.CardFooter([
             dbc.Row([
-                dbc.Col(html.Span([html.Sup("*", style={"color": "orange"}), "Exchange rate: Rwf per US dollar"]),
+                dbc.Col(html.Span([html.Sup("*", style={"color": "284fa1"}), "Comparison by Foods."]),
                         id="graph2-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="graph2-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="graph2-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="graph2-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -137,20 +136,22 @@ graphs.append(dbc.Card([
                     # year selection
                     dcc.Dropdown(
                         id='year-dropdown',
-                        options=[{'label': str(year), 'value': year} for year in years],
+                        options=[{'label': html.Span(year, style={'color': 'black', 'font-size': 15}), 'value': year} for year in years],  # noqa
                         value=years[-1],  # Default value is the latest year
-                        clearable=False
+                        clearable=False,
+                        style={"width": "80px", "margin-right": "3px"},
+                        className="mr-2 me-2"
                     ),
-                ]),
-                dcc.RadioItems(
-                    id='graph-type-selection',
-                    options=[
-                        {'label': 'CPI Monthly', 'value': 'cpi_monthly'},
-                        {'label': 'CPI Monthly Change', 'value': 'cpi_monthly_change'},
-                        {'label': 'CPI Histogram', 'value': 'cpi_histogram'}
-                    ],
-                    value='cpi_monthly', inline=True
-                ),
+                    dbc.RadioItems(
+                        id='graph-type-selection',
+                        options=[
+                            {'label': 'Monthly', 'value': 'cpi_monthly'},
+                            {'label': 'Monthly Change', 'value': 'cpi_monthly_change'},
+                            {'label': 'Histogram', 'value': 'cpi_histogram'}
+                        ],
+                        value='cpi_monthly', inline=True, className="ml-2"
+                    ),
+                ], className="d-flex justify-content-end"),
             ]
         )
     ], className="figTitle"),
@@ -163,10 +164,10 @@ graphs.append(dbc.Card([
     ),
     dbc.CardFooter([
             dbc.Row([
-                dbc.Col(html.Span([html.Sup("*", style={"color": "orange"}), "Exchange rate: Rwf per US dollar"]),
+                dbc.Col(html.Span([html.Sup("*", style={"color": "#284fa1"}), ""]),
                         id="graph3-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="graph3-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="graph3-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="graph3-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -192,30 +193,34 @@ graph4 = dcc.Graph(
             figure={
                 'data': [
                     # Urban
-                    {'x': [date for date in data['Urban']['Date'][1:]], 
-                    'y': [value for value in data["Urban"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100], 
-                    'type': 'line', 'name': 'Urban'},
+                    {
+                        'x': [date for date in data['Urban']['Date'][1:]],  # type: ignore
+                        'y': [value for value in data["Urban"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100],  # type: ignore  # noqa
+                        'type': 'line', 'name': 'Urban'},
 
                     # Rural
-                    {'x': [date for date in data['Rural']['Date'][1:]], 
-                    'y': [value for value in data["Rural"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100], 
-                    'type': 'line', 'name': 'Rural'},
+                    {
+                        'x': [date for date in data['Rural']['Date'][1:]],  # type: ignore
+                        'y': [value for value in data["Rural"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100],  # type: ignore  # noqa
+                        'type': 'line', 'name': 'Rural'},
 
                     # All Rwanda
-                    {'x': [date for date in data['All Rwanda']['Date'][1:]], 
-                    'y': [value for value in data["All Rwanda"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100], 
-                    'type': 'line', 'name': 'All Rwanda'}
+                    {
+                        'x': [date for date in data['All Rwanda']['Date'][1:]],  # type: ignore
+                        'y': [value for value in data["All Rwanda"]['GENERAL INDEX (CPI)'][1:].pct_change(periods=12) * 100],  # type: ignore  # noqa
+                        'type': 'line', 'name': 'All Rwanda'}
                 ],
                 'layout': {
-                    'title': 'CPI Annual Change',
+                    'title': '',
                     'xaxis': {
                         'tickmode': 'linear',
                         'dtick': "M12",
                         'tickformat': "%Y"
                     },
                     'yaxis': {
-                        'title': 'Annual Change (%)'
-                    }
+                        'title': None
+                    },
+                    'margin': {'l': 30, 'r': 9, 't': 30, 'b': 35},  # margin
                 }
             }
         )
@@ -224,7 +229,7 @@ graphs.append(dbc.Card([
     dbc.CardHeader([
         dbc.Row(
             [
-                dbc.Col("CPI Values", id='cpi-year-title-3', className="figCard"),
+                dbc.Col("CPI Annual Change", id='cpi-year-title-3', className="figCard"),
                 dbc.Col([
                 ])
             ]
@@ -239,10 +244,10 @@ graphs.append(dbc.Card([
     ),
     dbc.CardFooter([
             dbc.Row([
-                dbc.Col(html.Span([html.Sup("*", style={"color": "orange"}), "Exchange rate: Rwf per US dollar"]),
+                dbc.Col(html.Span([html.Sup("*", style={"color": "#284fa1"}), "Change in %"]),
                         id="graph4-info-footer", width=6),
                 dbc.Col(dbc.Button(
-                        [dbc.Spinner(html.Span(id="graph4-ai-loading"), size="sm"), " Explain"],
+                        [dbc.Spinner(html.Span(id="graph4-ai-loading"), size="sm"), " Summarize"],
                         color="primary",
                         id="graph4-explain-btn"
                         ), width=6, className="d-flex justify-content-end")
@@ -366,11 +371,14 @@ def compute_yearly_average(data, category):
 
 # callback for average CPI plot and All CPI plot
 @callback(
-    Output('dynamic-plot', 'figure'),
+    [Output('dynamic-plot', 'figure'),
+     Output('graph1-info-footer', 'children')],
     [Input('plot-selection', 'value')]
 )
 def all_n_average(plot_type):
+    title = ""
     if plot_type == 'average':
+        title = html.Span([html.Sup("*", style={"color": "#284fa1"}), "Yearly average CPI values"])
         # Compute yearly averages
         urban_avg = compute_yearly_average(data, "Urban")
         rural_avg = compute_yearly_average(data, "Rural")
@@ -385,14 +393,18 @@ def all_n_average(plot_type):
                  'y': all_rwanda_avg['GENERAL INDEX (CPI)'], 'type': 'line', 'name': 'All Rwanda Average'}
             ],
             'layout': {
-                'title': 'Average CPI per Year',
-                'xaxis': {'title': 'Year', 'tickangle': 45},
-                'yaxis': {'title': 'Average CPI'}
+                'title': '',
+                'xaxis': {'title': None, 'tickangle': 45},
+                'yaxis': {'title': None},
+                'paper_bgcolor': 'rgb(243, 243, 243)',
+                'plot_bgcolor': 'rgb(243, 243, 243)',
+                'margin': {'l': 30, 'r': 9, 't': 30, 'b': 50},  # margin
             }
         }
-        return average_cpi_plot
+        return average_cpi_plot, title
     else:
         # Urban vs. Rural vs. All Rwanda CPI plot
+        title = html.Span([html.Sup("*", style={"color": "#284fa1"}), "Monthly CPI values"])
         return {
             'data': [
                 {'x': months, 'y': data["Urban"]["GENERAL INDEX (CPI)"][1:], 'type': 'line', 'name': 'Urban'},
@@ -400,10 +412,14 @@ def all_n_average(plot_type):
                 {'x': months, 'y': data["All Rwanda"]["GENERAL INDEX (CPI)"][1:], 'type': 'line', 'name': 'All Rwanda'}
             ],
             'layout': {
-                'title': 'Urban vs. Rural vs. All Rwanda CPI',
-                'xaxis': {'tickangle': 45}
+                'title': '',
+                'xaxis': {'title': None, 'tickangle': 45},
+                'yaxis': {'title': None},
+                'paper_bgcolor': 'rgb(243, 243, 243)',
+                'plot_bgcolor': 'rgb(243, 243, 243)',
+                'margin': {'l': 30, 'r': 9, 't': 30, 'b': 50},  # margin
             }
-        }
+        }, title
 
 
 # cpi monthly
@@ -411,7 +427,6 @@ def CPI_Monthly(selected_year):
     mask_urban = pd.to_datetime(data["Urban"]["Date"][1:]).dt.year == selected_year
     mask_rural = pd.to_datetime(data["Rural"]["Date"][1:]).dt.year == selected_year
     mask_all_rwanda = pd.to_datetime(data["All Rwanda"]["Date"][1:]).dt.year == selected_year
-
     return {
         'data': [
             {
@@ -434,11 +449,14 @@ def CPI_Monthly(selected_year):
             }
         ],
         'layout': {
-            'title': f'CPI Monthly for {selected_year}',
+            'title': None,
             'xaxis': {
                 'ticktext': ['January', 'February', 'March', 'April',
                              'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-            }
+            },
+            'paper_bgcolor': 'rgb(243, 243, 243)',
+            'plot_bgcolor': 'rgb(243, 243, 243)',
+            'margin': {'l': 30, 'r': 9, 't': 30, 'b': 50},  # margin
         }
     }
 
@@ -475,14 +493,17 @@ def CPI_monthly_change(selected_year):
             }
         ],
         'layout': {
-            'title': f'CPI Monthly Change for {selected_year}',
+            'title': None,
             'xaxis': {
                 'ticktext': ['January', 'February', 'March', 'April', 'May', 'June',
                              'July', 'August', 'September', 'October', 'November', 'December']
             },
             'yaxis': {
-                'title': 'Monthly Change (%)'
-            }
+                'title': None
+            },
+            'paper_bgcolor': 'rgb(243, 243, 243)',
+            'plot_bgcolor': 'rgb(243, 243, 243)',
+            'margin': {'l': 30, 'r': 9, 't': 30, 'b': 50},  # margin
         }
     }
 
@@ -504,40 +525,48 @@ def CPI_histogram(selected_year):
     fig = px.histogram(long_format_data, x='CPI', color='Region', barmode='overlay')
 
     fig.update_layout(
-            title={
-                'text': f'CPI Values for {selected_year}',
-                'x': 0.5,  # Center the title
-                'xanchor': 'center'
-            },
+            title=None,
             xaxis_title='CPI',
             yaxis_title='Count',
-            plot_bgcolor='white',
             xaxis={'showgrid': True},
             yaxis={'showgrid': True},
-            paper_bgcolor='white',
             font=dict(size=12),
+            paper_bgcolor='rgb(243, 243, 243)',
+            plot_bgcolor='rgb(243, 243, 243)',
+            margin=dict(l=30, r=9, t=30, b=25)
         )
     return fig
 
 
 # call back for cpi monthly, cpi monthly change and cpi histogram
 @callback(
-    Output('combined-cpi-graph', 'figure'),
+    [Output('combined-cpi-graph', 'figure'),
+     Output('cpi-year-title', 'children'),
+     Output('graph3-info-footer', 'children')],
     [Input('year-dropdown', 'value'),
      Input('graph-type-selection', 'value')]
 )
 def monthly__mnthlychange(selected_year, graph_type):
+    note = html.Span([html.Sup("*", style={"color": "#284fa1"}), f"CPI values for {selected_year}"])
+    fig = dash.no_update
+    title = None
+
     if graph_type == 'cpi_monthly':
+        title = "Monthly CPI"
         # Code to generate the 'CPI Monthly' plot for the selected year
-        return CPI_Monthly(selected_year)
+        fig = CPI_Monthly(selected_year)
 
     elif graph_type == 'cpi_monthly_change':
+        title = "Monthly CPI Change in %"
         # Code to generate the 'CPI Monthly Change' plot for the selected year
-        return CPI_monthly_change(selected_year)
+        fig = CPI_monthly_change(selected_year)
 
     elif graph_type == 'cpi_histogram':
+        title = "Histogram - CPI"
         # Code to generate the 'CPI Histogram' for the selected year
-        return CPI_histogram(selected_year)
+        fig = CPI_histogram(selected_year)
+
+    return fig, title, note
 
 
 # Callback to update the bar chart based on the selected region

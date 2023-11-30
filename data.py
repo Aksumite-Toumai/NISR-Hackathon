@@ -47,3 +47,10 @@ def cpi_load_data(sheet_name):
 
 
 CURRENT_LANG = "en"
+
+
+# GDP for all countries
+data1 = pd.read_csv("gdp_data.csv")
+data2 = pd.read_csv("country_codes.csv")
+GDP_FOR_ALL_COUNTRY = pd.merge(data1, data2, on="country_code")
+GDP_years = sorted(GDP_FOR_ALL_COUNTRY['year'].unique())

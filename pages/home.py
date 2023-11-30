@@ -1,127 +1,74 @@
 import dash  # type: ignore
 from dash import html, dcc, Input, Output, callback  # type: ignore
 import dash_bootstrap_components as dbc  # type: ignore
-import numpy as np  # type: ignore
-from data import GDP_EXCEL_FILE
+from data import GDP_EXCEL_FILE, GDP_FOR_ALL_COUNTRY, GDP_years
 
 
 dash.register_page(__name__)
 
 
-pop_dropdown_years = dcc.Dropdown(
-                    id='pop-year-dropdown',
+africa_dropdown_years = dcc.Dropdown(
+                    id='africa-year-dropdown',
                     options=[
                             {
                                 "label": html.Span(year, style={'color': 'black', 'font-size': 12}),
                                 "value": year,
-                            } for year in GDP_EXCEL_FILE['Years'].values  # type: ignore
+                            } for year in GDP_years  # type: ignore
                     ],
-                    value=2022,
+                    value=GDP_years[-1],
                     clearable=False,
-                    style={"border": "0.2"},
+                    style={"width": "110px"}
                 ),
-exchange_dropdown_years = dcc.Dropdown(
-                id='exchange-year-dropdown',
-                options=[
-                        {
-                            "label": html.Span(year, style={'color': 'black', 'font-size': 12}),
-                            "value": year,
-                        } for year in GDP_EXCEL_FILE['Years'].values  # type: ignore
-                ],
-                value=2022,
-                clearable=False,
-                style={"border": "0.2"},
-            ),
-popuplation_card = dbc.Card(
-    [
+
+africa_gdp_card = dbc.Card([
+    dbc.CardHeader([
         dbc.Row(
             [
-                dbc.Col(
-                    dbc.CardImg(
-                        src="/assets/population.jpeg",
-                        className="img-fluid mt-0 mb-0",
-                        style={"height": "153px", "padding": "0", "margin": "0"},
-                    ),
-                    className="col-md-5",
-                ),
-                dbc.Col(
-                    dbc.CardBody(
-                        [
-                            html.H4("Population", className="card-title"),
-                            html.Span(pop_dropdown_years),
-                            html.Small(
-                                "Total population (millions): ",
-                                className="card-text text-muted",
-                            ),
-                            html.Small(
-                                id="pop-value",
-                                className="card-text text-muted",
-                            ),
-                            html.Br(),
-                            html.Small(
-                                "Growth Rate: ",
-                                className="card-text text-muted",
-                            ),
-                            html.Small(
-                                id="pop-rate",
-                                className="card-text text-muted",
-                            ),
-                        ]
-                    ),
-                    className="col-md-7",
-                ),
-            ],
-            className="g-0 d-flex align-items-center",
-            style={"padding": "0", "margin": "0"},
+                dbc.Col("Rwanda GDP Comparison in Africa"),
+                dbc.Col(africa_dropdown_years, className="d-flex justify-content-end")
+            ]
         )
-    ],
-    style={"maxWidth": "540px", "padding": "0"},
-)
-exchange_card = dbc.Card(
-    [
+    ], className="figTitle"),
+    dbc.CardBody(
+        [
+            html.Div([
+            ], id="africa-list")
+        ], style={"padding": "0"},
+    ),
+    dbc.CardFooter([html.Sup("*", style={"color": "red"}), "Source: Kaggle"]),
+], outline=False)
+
+
+world_dropdown_years = dcc.Dropdown(
+                    id='world-year-dropdown',
+                    options=[
+                            {
+                                "label": html.Span(year, style={'color': 'black', 'font-size': 12}),
+                                "value": year,
+                            } for year in GDP_years  # type: ignore
+                    ],
+                    value=GDP_years[-1],
+                    clearable=False,
+                    style={"width": "110px"}
+                ),
+
+world_gdp_card = dbc.Card([
+    dbc.CardHeader([
         dbc.Row(
             [
-                dbc.Col(
-                    dbc.CardImg(
-                        src="/assets/exchange.png",
-                        className="img-fluid mt-0 mb-0",
-                        style={"height": "153px", "padding": "0", "margin": "0"},
-                    ),
-                    className="col-md-5",
-                ),
-                dbc.Col(
-                    dbc.CardBody(
-                        [
-                            html.H4("Exchange", className="card-title"),
-                            html.Span(exchange_dropdown_years),
-                            html.Small(
-                                "Rwf per US dollar: ",
-                                className="card-text text-muted",
-                            ),
-                            html.Small(
-                                id="exchange-value",
-                                className="card-text text-muted",
-                            ),
-                            html.Br(),
-                            html.Small(
-                                "Growth Rate: ",
-                                className="card-text text-muted",
-                            ),
-                            html.Small(
-                                id="exchange-rate",
-                                className="card-text text-muted",
-                            ),
-                        ]
-                    ),
-                    className="col-md-7",
-                ),
-            ],
-            className="g-0 d-flex align-items-center",
-            style={"padding": "0", "margin": "0"},
+                dbc.Col("Rwanda GDP Comparison to the world", width=6),
+                dbc.Col(world_dropdown_years, className="d-flex justify-content-end", width=6)
+            ]
         )
-    ],
-    style={"maxWidth": "540px", "padding": "0"},
-)
+    ], className="figTitle"),
+    dbc.CardBody(
+        [
+            html.Div(id="world-list"),
+        ], style={"padding": "0"},
+    ),
+    dbc.CardFooter([html.Sup("*", style={"color": "red"}), "Source: Kaggle"]),
+], outline=False)
+
 
 dgp_2017_card = dbc.Card(
     [
@@ -203,8 +150,8 @@ def layout():
         dbc.Row(
             [
 
-                dbc.Col(popuplation_card, width=3),
-                dbc.Col(exchange_card, width=3),
+                dbc.Col(africa_gdp_card, width=3),
+                dbc.Col(world_gdp_card, width=3),
                 dbc.Col(dgp_2017_card, width=3),
                 dbc.Col(dgp_current_card, width=3),
             ],
@@ -243,28 +190,47 @@ def layout():
 
 
 @callback(
-    [Output("pop-value", "children"), Output("pop-rate", "children")],
+    [Output("africa-list", "children")],
     [
-        Input("pop-year-dropdown", "value"),
+        Input("africa-year-dropdown", "value"),
     ],
 )
-def gdp_pop_year_dropdown_on_change(items_value):
-    data = GDP_EXCEL_FILE[['Years', 'Total population (millions)']]
-    data['rate'] = data['Total population (millions)'].pct_change()
-    value = data[data['Years'] == items_value]['Total population (millions)'].values[0]
-    rate = np.round(data[data['Years'] == items_value]['rate'].values[0], 2)*100
-    return [value], [f"{rate}%"]
+def gdp_africa_year_dropdown_on_change(items_value):
+    data = GDP_FOR_ALL_COUNTRY[GDP_FOR_ALL_COUNTRY['year'] == items_value]
+    # Select records where the 'Region' column contains the word 'Africa'
+    africa_data = data[data['region'].str.contains('Sub-Saharan Africa', case=False, regex=False)]
+
+    data = africa_data.sort_values(by="value", ascending=False).reset_index()
+    top_5_df = data.nlargest(4, 'value')
+    rwanda_gdp = data.loc[data['country_name'] == 'Rwanda', 'value'].values[0]
+    position = data[data['value'] > rwanda_gdp].shape[0] + 1
+    top_5_countries = [
+        html.Li(f"{index+1} - {row['country_name']}: ${row['value']}", className='list-group-item')
+        for index, row in top_5_df.iterrows()
+    ]
+    if "Rwanda" not in top_5_df['country_name']:
+        top_5_countries += [html.Li(f"{position} - Rwanda: ${rwanda_gdp}", className='list-group-item')]
+    output = [html.Ul(top_5_countries, className='list-group')]
+    return [output]
 
 
 @callback(
-    [Output("exchange-value", "children"), Output("exchange-rate", "children")],
+    [Output("world-list", "children")],
     [
-        Input("exchange-year-dropdown", "value"),
+        Input("world-year-dropdown", "value"),
     ],
 )
-def gdp_exchange_year_dropdown_on_change(items_value):
-    data = GDP_EXCEL_FILE[['Years', 'Exchange rate: Rwf per US dollar']]
-    data['rate'] = data['Exchange rate: Rwf per US dollar'].pct_change()
-    value = data[data['Years'] == items_value]['Exchange rate: Rwf per US dollar'].values[0]
-    rate = np.round(data[data['Years'] == items_value]['rate'].values[0], 2)*100
-    return [value], [f"{rate}%"]
+def gdp_world_year_dropdown_on_change(items_value):
+    data = GDP_FOR_ALL_COUNTRY[GDP_FOR_ALL_COUNTRY['year'] == items_value]
+    data = data.sort_values(by="value", ascending=False).reset_index()
+    top_5_df = data.nlargest(4, 'value')
+    rwanda_gdp = data.loc[data['country_name'] == 'Rwanda', 'value'].values[0]
+    position = data[data['value'] > rwanda_gdp].shape[0] + 1
+    top_5_countries = [
+        html.Li(f"{index+1} - {row['country_name']}: ${row['value']}", className='list-group-item')
+        for index, row in top_5_df.iterrows()
+    ]
+    if "Rwanda" not in top_5_df['country_name']:
+        top_5_countries += [html.Li(f"{position} - Rwanda: ${rwanda_gdp}", className='list-group-item')]
+    output = [html.Ul(top_5_countries, className='list-group')]
+    return [output]

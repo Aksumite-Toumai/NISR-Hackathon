@@ -2,7 +2,6 @@ from dash import Dash, html, dcc  # type: ignore
 import dash_bootstrap_components as dbc  # type: ignore
 import logging
 import dash  # type: ignore
-import dash_auth  # type: ignore
 from topbar import topbar
 from sidebar import sidebar
 
@@ -18,11 +17,6 @@ logging.basicConfig(
 )
 
 
-# Keep this out of source code repository - save in a file or a database
-VALID_USERNAME_PASSWORD_PAIRS = {
-    'test': 'test'
-}
-
 # Create the dash app
 DASH_APP = Dash(__name__,
                 use_pages=True,
@@ -32,11 +26,6 @@ DASH_APP = Dash(__name__,
                                       "/assets/css/sb-admin-2.min.css",
                                       "/assets/home.css"
                                       ])
-
-auth = dash_auth.BasicAuth(
-    DASH_APP,
-    VALID_USERNAME_PASSWORD_PAIRS
-)
 
 
 # Home page design
