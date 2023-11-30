@@ -46,8 +46,8 @@ def sidebar():
         ),
         html.Hr(),
         html.P([
-            html.I(className="fa fa-microchip fa-lg"),
-            dbc.Label("Machine Learning", style={'padding-left': '0.5rem'}, id="sidebar-text-machine")
+            html.I(className="fa fa-question-circle fa-lg"),
+            dbc.Label("AI Assistant", style={'padding-left': '0.5rem'}, id="sidebar-text-machine")
             ], style={"color": "#284fa1"}),
         dbc.Nav(
             [

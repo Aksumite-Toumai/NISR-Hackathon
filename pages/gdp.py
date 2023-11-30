@@ -100,7 +100,7 @@ explain_card = html.Div(
                 ],
                 title="AI Output",
             ),
-        ], id="ai-explain-btn", start_collapsed=False,
+        ], id="ai-explain-btn", start_collapsed=True,
     )
 )
 
@@ -110,7 +110,7 @@ form = html.Div(
         [
             dbc.Row(
                 dbc.Input(type="text", placeholder="Ask me something about the GDP...", id="input-chat"),
-                className="me-3",
+                className="mb-3"
             ),
             html.Div([dbc.Button(
                         [dbc.Spinner(html.Span(id="ai-loading"), size="sm"), " Submit"],
@@ -119,7 +119,6 @@ form = html.Div(
                     ),
             ]),
         ],
-        className="g-2",
     )
 )
 
@@ -258,7 +257,7 @@ exchange_rate_card = dbc.Card([
                             ],
                             title="AI Output",
                         ),
-                    ], start_collapsed=False,
+                    ], start_collapsed=True,
                 )
             )
         ], ),
@@ -922,8 +921,8 @@ def national_income_expenditure_on_change(start_date, end_date):
 
     fig.update_layout(
         barmode='relative',
-        xaxis_title='Amount (Rwf billions)',
-        yaxis_title='Years',
+        xaxis_title=None,
+        yaxis_title=None,
         paper_bgcolor='rgb(243, 243, 243)',
         plot_bgcolor='rgb(243, 243, 243)',
         margin=dict(l=30, r=9, t=30, b=25)
@@ -971,11 +970,10 @@ def exchange_rate_explain(btn, start_date, end_date):
     start_date = start_date_object.year
     end_date = end_date_object.year
     data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)]
-    # query = f"The figure chart type is {chart} and the GDP value is {gdp_value} \n. Answer the following prompt: {input_text}"
 
     if btn is not None:
-        return chat_with_csv(data[["Years", "Echange rate"]], "line")
-    return dash.no_update
+        return chat_with_csv(data[["Years", "Exchange rate: Rwf per US dollar"]], "line"), ""
+    return dash.no_update, dash.no_update
 
 
 @callback(
@@ -995,8 +993,6 @@ def population_rate_explain(btn, start_date, end_date):
     end_date = end_date_object.year
     data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)]
     data = data[["Years", "Total population (millions)"]]
-    data["Population Growth Rate"] = data["Total population (millions)"].pct_change()
-    data["Population Growth Rate"] = (data["Population Growth Rate"] * 100).round(1)
 
     if btn is not None:
         return chat_with_csv(data, "line"), "", False
@@ -1009,20 +1005,19 @@ def population_rate_explain(btn, start_date, end_date):
      Output("proportions_of_gdp-collapse", "start_collapsed")],
     [
         Input("proportions_of_gdp-explain-btn", "n_clicks"),
-        State("date-picker-range", "start_date"),
-        State("date-picker-range", "end_date"),
+        State("gdp-by-sectors-year-dropdown", "value"),
     ]
 )
-def proportions_of_gdp_rate_explain(btn, start_date, end_date):
-    start_date_object = date.fromisoformat(start_date)
-    end_date_object = date.fromisoformat(end_date)
-    start_date = start_date_object.year
-    end_date = end_date_object.year
-    data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)]
-    # query = f"The figure chart type is {chart} and the GDP value is {gdp_value} \n. Answer the following prompt: {input_text}"
+def proportions_of_gdp_rate_explain(btn, selected_date):
+    labels = ["Years", "Agriculture", "Industry", "Services", "Adjustments", "GDP at current prices"]
 
     if btn is not None:
-        return chat_with_csv(data[["Years", "Echange rate"]], "line"), False
+        if selected_date != "All":
+            data = GDP_EXCEL_FILE[GDP_EXCEL_FILE["Years"] == selected_date][labels]
+            return chat_with_csv(data, "pie chart to see the contribution of each sector on GDP at current prices"), "", False
+        else:
+            return chat_with_csv(GDP_EXCEL_FILE[labels],
+                                 "grouped bar chart to see the contribution of each sector on GDP at current prices"), "", False
     return dash.no_update, dash.no_update, dash.no_update
 
 
@@ -1042,10 +1037,21 @@ def national_income_expenditure_explain(btn, start_date, end_date):
     start_date = start_date_object.year
     end_date = end_date_object.year
     data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)]
-    # query = f"The figure chart type is {chart} and the GDP value is {gdp_value} \n. Answer the following prompt: {input_text}"
-
+    cols = [
+        "Years",
+        'Gross Domestic Product at current prices',
+        'Factor income from abroad, net',
+        'Gross National Income',
+        'Current transfers, net',
+        'Gross National Disposible Income',
+        'Less Final consumption expenditure',
+        'Gross National Saving',
+        'Less Gross capital formation',
+        'Net lending to the rest of the world'
+    ]
+    chart_type = "stacked bar plot to see the contribution of each columns on National Income and Expenditure (in billion RWF)"
     if btn is not None:
-        return chat_with_csv(data[["Years", "Echange rate"]], "line"), False
+        return chat_with_csv(data[cols], chart_type), "", False
     return dash.no_update, dash.no_update, dash.no_update
 
 
@@ -1065,8 +1071,31 @@ def expenditure_explain(btn, start_date, end_date):
     start_date = start_date_object.year
     end_date = end_date_object.year
     data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)]
-    # query = f"The figure chart type is {chart} and the GDP value is {gdp_value} \n. Answer the following prompt: {input_text}"
-
+    cols = ["Resource balance", "Gross capital formation", "Private (includes changes in stock)", "Government"]
+    data = data[["Years"] + cols]
     if btn is not None:
-        return chat_with_csv(data[["Years", "Echange rate"]], "line"), False
+        return chat_with_csv(data, "stacked bar plot to see the contribution of each sector on GDP"), "", False
+    return dash.no_update, dash.no_update, dash.no_update
+
+
+@callback(
+    [Output("gdp_per_capita-ai-ouput", "children"),
+     Output("gdp_per_capita-ai-loading", "children"),
+     Output("gdp_per_capita-collapse", "start_collapsed")],
+    [
+        Input("gdp_per_capita-explain-btn", "n_clicks"),
+        State("date-picker-range", "start_date"),
+        State("date-picker-range", "end_date"),
+    ]
+)
+def gdp_per_capita_explain(btn, start_date, end_date):
+    start_date_object = date.fromisoformat(start_date)
+    end_date_object = date.fromisoformat(end_date)
+    start_date = start_date_object.year
+    end_date = end_date_object.year
+    data = GDP_EXCEL_FILE[(GDP_EXCEL_FILE["Years"] >= start_date) & (GDP_EXCEL_FILE["Years"] <= end_date)]
+    cols = ["GDP per head (in \'000 Rwf)", "GDP per head (in current US dollars)"]
+    data = data[["Years"] + cols]
+    if btn is not None:
+        return chat_with_csv(data, "line chart of both in the same figure"), "", False
     return dash.no_update, dash.no_update, dash.no_update
