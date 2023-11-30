@@ -7,7 +7,9 @@ load_dotenv()
 
 # Retrieve OpenAI API key
 openai_api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=openai_api_key)
+client = None
+if openai_api_key is not None:
+    client = OpenAI(api_key=openai_api_key)
 
 
 def chat_with_csv(df, chart_type):
