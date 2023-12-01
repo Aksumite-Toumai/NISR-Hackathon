@@ -58,7 +58,6 @@ Once you have Python 3.10 or higher, you can proceed with the following installa
 - A list of technologies, libraries, and frameworks used in the project.
   - [Python](https://www.python.org/)
   - [Dash](https://dash.plotly.com/)
-  - [Flask](https://flask.palletsprojects.com/en/3.0.x/)
   - [Plotly](https://plotly.com/graphing-libraries/)
   - [Pandas](https://pandas.pydata.org/)
   - [Bootstrap](https://getbootstrap.com/)
